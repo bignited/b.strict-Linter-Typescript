@@ -57,6 +57,8 @@ Users appreciate release notes as you update your extension.
 * Updated test with jest to make global test file
 * added recommended config try-out (feedback is welcome on this)
 
+### 2.1.1
+* Fixed a broken import
 ---
 
 ## Following Eslint Rules
