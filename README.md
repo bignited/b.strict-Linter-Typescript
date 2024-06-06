@@ -37,11 +37,11 @@ Users appreciate release notes as you update your extension.
 
 ### 1.0.0
 
-Initial release of ...
+* Initial release of `max-function-size.js`
 
 ### 1.0.1
 
-Fixed issue #.
+* Fixed issue with using local plugin instead of `npm install --save-dev eslint-plugin-bstrict`
 
 ### 1.1.0
 
