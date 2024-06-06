@@ -43,9 +43,9 @@ Users appreciate release notes as you update your extension.
 
 * Fixed issue with using local plugin instead of `npm install --save-dev eslint-plugin-bstrict`
 
-### 1.1.0
+### 1.0.2
 
-Added features X, Y, and Z.
+* Update ReadMe to include all version specific changes
 
 ---
 
