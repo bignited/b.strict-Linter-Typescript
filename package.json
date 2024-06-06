@@ -23,6 +23,7 @@
     "author": "b.ignited",
     "license": "ISC",
     "devDependencies": {
-        "eslint": "^9.0.0"
+        "eslint": "^9.0.0",
+        "eslint-plugin-bstrict": "^1.0.0"
     }
 }

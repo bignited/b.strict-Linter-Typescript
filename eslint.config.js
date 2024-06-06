@@ -1,5 +1,8 @@
+// eslint.config.js
+"use strict";
+
 // Import the ESLint plugin
-const eslintPluginBstrict = require("./lib/index.js");
+const eslintPluginBstrict = require("eslint-plugin-bstrict");
 
 module.exports = [
     {
