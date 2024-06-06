@@ -3,9 +3,8 @@
  * @author b.ignited
 */
 
-const recommended = require('./lib/config/recommended');
-const maxFunctionSizeRule = require('./rules/max-function-size');
-const noUnnecessaryWaitingRule = require('./rules/no-unnecessary-waiting');
+const maxFunctionSizeRule = require('./lib/rules/max-function-size');
+const noUnnecessaryWaitingRule = require('./lib/rules/no-unnecessary-waiting');
 
 module.exports = {
   rules: {
