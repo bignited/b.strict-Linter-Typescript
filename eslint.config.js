@@ -2,13 +2,13 @@
 'use strict';
 
 // Import the ESLint plugin
-const eslintPluginBstrict = require('./lib/index.js');
+import eslintPluginBstrict from './lib/index.js';
 
-module.exports = [
+export default [
   {
     files: ['**/*.js'],
     languageOptions: {
-      sourceType: 'commonjs',
+      sourceType: 'module',
       ecmaVersion: 'latest',
     },
     // Using the eslint-plugin-bstrict plugin defined locally
