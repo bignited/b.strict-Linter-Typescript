@@ -5,23 +5,13 @@
 // npx eslint example.js --fix
 
 function correctFooBar() {
-  const foo = "bar";
+  const foo = 'bar';
 }
 
 function incorrectFoo() {
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
+    // This is an unnecessary wait
+    cy.wait(1000)
   }
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-  }
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-  }
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-  }
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-  };
 }

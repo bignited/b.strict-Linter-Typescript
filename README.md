@@ -47,6 +47,11 @@ Users appreciate release notes as you update your extension.
 
 * Update ReadMe to include all version specific changes
 
+### 2.0.0
+
+* release of `no-unnecessary-waiting.js` which checks if there is an arbitrary number in `cy.wait()` statement
+* Added default rules from ESlint enforced in b.ignited
+
 ---
 
 ## Following Eslint Rules
