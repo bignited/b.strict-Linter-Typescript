@@ -113,5 +113,3 @@ ruleTester.run('no-unnecessary-waiting', rule, {
     },
   ],
 });
-
-console.log('All tests passed!');

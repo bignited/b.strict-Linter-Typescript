@@ -52,6 +52,11 @@ Users appreciate release notes as you update your extension.
 * release of `no-unnecessary-waiting.js` which checks if there is an arbitrary number in `cy.wait()` statement
 * Added default rules from ESlint enforced in b.ignited
 
+### 2.1.0
+
+* Updated test with jest to make global test file
+* added recommended config try-out (feedback is welcome on this)
+
 ---
 
 ## Following Eslint Rules

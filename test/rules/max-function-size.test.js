@@ -41,5 +41,3 @@ ruleTester.run('max-function-size', rule, {
   ],
 }
 );
-
-console.log('All tests passed!');
