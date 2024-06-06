@@ -11,7 +11,7 @@
         "eslint-plugin-bstrict"
     ],
     "peerDependencies": {
-        "eslint": ">=9.0.0"
+        "eslint": ">=8.0.0"
     },
     "directories": {
         "lib": "lib",
