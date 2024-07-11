@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-bstrict",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "ESLint plugin for bstrict.",
   "main": "legacy.js",
   "exports": {
@@ -28,7 +28,7 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^9.4.0",
-    "eslint-plugin-bstrict": "^2.2.2"
+    "eslint-plugin-bstrict": "^3.0.0"
   },
   "dependencies": {
     "jest": "^29.7.0"
