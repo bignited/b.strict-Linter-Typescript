@@ -1,89 +1,129 @@
-# bstrict README
+# bstrict ESLint Plugin
 
-This is the README for your extension "bstrict". After writing up a brief description, we recommend including the following sections.
+An [ESLint](https://eslint.org) plugin for [b.ignited](https://bignited.be).
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Table Of Contents
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Usage](#usage)
 
 ## Requirements
 
-Prerequisites: [Node.js](https://nodejs.org/) built with SSL support. (If you are using an official Node.js distribution, SSL is always built in.)
+[ESLint](https://www.npmjs.com/package/eslint) `v8` or `v9`.
+This plugin supports the use of [Flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) with ESLint `8.57.0` and above.
 
-## Extension Settings
+## Installation
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Easy to use with npm or yarn using following commands:
 
-For example:
+```sh
+npm install --save-dev eslint-plugin-bstrict
+```
+or
+```sh
+yarn add --dev eslint-plugin-bstrict
+```
 
-This extension contributes the following settings:
+## Usage
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+If you are using ESLint `v7` or `v8`, then add an `.eslintrc.json` file to the root directory of your project with the contents shown below. If you are using ESLint `v9`, then to continue using this format you need to set the `ESLINT_USE_FLAT_CONFIG` environment variable to `false` (see [ESLint v9 > Configuration Files (Deprecated)](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated). However this configuration system is planned to be removed in ESLint `10.0.0`.
 
-## Known Issues
+ESLint `v9` and above uses a [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files) format with filename `eslint.config.*js` by default. Please refer to [Flat config](#eslint-v9-or-above). (You may also use this with ESLint `8.57.0`.)
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```json
+{
+  "plugins": [
+    "bstrict"
+  ]
+}
+```
 
-## Release Notes
+You can add rules individually:
 
-Users appreciate release notes as you update your extension.
+```json
+{
+  "rules" : {
+      "bstrict/max-function-size": ["warn", 15],
+      "bstrict/no-unnecessary-waiting": "error"
+  }
+}
+```
 
-### 1.0.0
+We also provide a recommended configuration so you can forego configuring _plugins_, _rules_ individually. See [recommended rules](#recommended-configuration) for which rules are included.
 
-* Initial release of `max-function-size.js`
+```json
+{
+  "extends": [
+    "plugin:bstrict/recommended"
+  ]
+}
+```
 
-### 1.0.1
+### ESLint `v9` or above
 
-* Fixed issue with using local plugin instead of `npm install --save-dev eslint-plugin-bstrict`
+If you want to use ESLint `v9` or above with [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files), then add an `eslint.config.js` file to the root directory of your project with the contents shown below.
 
-### 1.0.2
+```js
+import pluginBstrict from 'eslint-plugin-bstrict/flat'
+```
 
-* Update ReadMe to include all version specific changes
+Since we now have the flat configurations available you can add rules individually:
 
-### 2.0.0
+```js
+export default [
+  {
+    plugins: {
+      bstrict: pluginBstrict
+    },
+    rules: {
+      'bstrict/max-function-size': ['warn', 15],
+      'bstrict/no-unnecessary-waiting': 'error'
+    }
+  }
+]
+```
 
-* release of `no-unnecessary-waiting.js` which checks if there is an arbitrary number in `cy.wait()` statement
-* Added default rules from ESlint enforced in b.ignited
+We also provide a recommended configuration so you can forego configuring _plugins_, _rules_ individually. See [recommended rules](#rules) for which rules are included.
 
-### 2.1.0
+```js
+export default [
+  pluginBstrict.configs.recommended
+  {
+    rules: {
+      // any other rules you want to add.
+    }
+  }
+]
+```
 
-* Updated test with jest to make global test file
-* added recommended config try-out (feedback is welcome on this)
+## Disable rules
 
-### 2.1.1
+You can disable specific rules per file, for a portion of the file or more.
 
-* Fixed a broken import
+Disable the `bstrict/max-function-size` rule for the entire file by placing this at the start of the file:
 
-### 2.2.1
+```js
+/* eslint-disable bstrict/max-function-size */
+```
 
-* Added backwards compatible for eslint 8
+Disable the `bstrict/max-function-size` rule for only a portion of the file:
 
----
+```js
+/* eslint-disable bstrict/max-function-size */
+function foo() {
+  ...
+}
+/* eslint-enable bstrict/max-function-size */
+```
 
-## Following Eslint Rules
+For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/rules) documentation.
 
-Ensure that you've read through the eslint custom rules guidelines and follow the best practices for creating your eslint plugin.
+## Rules
 
-* [Eslint Custom Rules](https://eslint.org/docs/latest/extend/custom-rules)
+All following rules are within recommended configuration
 
-## Working with Markdown
+### ESLint rules
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+| Name                  | Description | Configuration |
+|:----------------------|:------------|:--------------|
+|

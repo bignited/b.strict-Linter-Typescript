@@ -8,7 +8,7 @@
 const { RuleTester } = require('eslint');
 const rule = require('../../lib/rules/max-function-size');
 
-const ruleTester = new RuleTester({ languageOptions: { ecmaVersion: 6 } });
+const ruleTester = new RuleTester();
 
 ruleTester.run('max-function-size', rule, {
   valid: [
@@ -37,7 +37,15 @@ ruleTester.run('max-function-size', rule, {
       errors: [
         { messageId: 'exceed', data: { lineCount: 15, maxLines: 15 } }
       ]
-    }
+    },
+
+    // Test that a function with 15 lines of not full comment lines fails
+    {
+      code: `function name() {\n${'test // test\n'.repeat(15)}}`,
+      errors: [
+        { messageId: 'exceed', data: { lineCount: 15, maxLines: 15 } }
+      ]
+    },
   ],
 }
 );

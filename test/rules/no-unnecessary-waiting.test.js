@@ -8,7 +8,7 @@
 const { RuleTester } = require('eslint');
 const rule = require('../../lib/rules/no-unnecessary-waiting');
 
-const ruleTester = new RuleTester({ languageOptions: { ecmaVersion: 6 } });
+const ruleTester = new RuleTester();
 const errors = [{ messageId: 'unexpected' }];
 
 ruleTester.run('no-unnecessary-waiting', rule, {
@@ -50,7 +50,7 @@ ruleTester.run('no-unnecessary-waiting', rule, {
     },
 
     // Test cy work with tick function
-    { 
+    {
       code: 'cy.tick(500)'
     },
 
@@ -59,7 +59,7 @@ ruleTester.run('no-unnecessary-waiting', rule, {
       code: 'const someRequest="@someRequest"; cy.wait(someRequest)'
     },
 
-    //Test wait works when the line above is a comment
+    //Test wait works when the line above is a full line comment
     {
       code: '//this is a comment\n cy.wait(10)'
     }
@@ -111,5 +111,10 @@ ruleTester.run('no-unnecessary-waiting', rule, {
     {
       code: 'const customWait = (ms = 1) => { cy.get(".some-element").wait(ms) }', errors
     },
+
+    //Test wait has an error when the line above is not a full line comment
+    {
+      code: 'cy.visit(b.ignited) //this is a comment\n cy.wait(10)', errors
+    }
   ],
 });

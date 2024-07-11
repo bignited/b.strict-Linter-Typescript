@@ -2,7 +2,7 @@
 'use strict';
 
 // Import the ESLint plugin
-import eslintPluginBstrict from './lib/flat.js';
+import eslintPluginBstrict from 'eslint-plugin-bstrict/flat';
 
 export default [
   {
@@ -31,6 +31,7 @@ export default [
       // Using the rules defined in the eslint-plugin-bstrict plugin
       'bstrict/max-function-size': ['warn', 15],
       'bstrict/no-unnecessary-waiting': 'error',
+      'bstrict/no-force': 'error'
     }
   }
 ]
