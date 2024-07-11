@@ -27,8 +27,9 @@
   "author": "b.ignited",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^9.4.0",
-    "eslint-plugin-bstrict": "^3.0.0"
+    "@stylistic/eslint-plugin-js": "^2.3.0",
+    "eslint": "^9.6.0",
+    "eslint-plugin-bstrict": "^3.0.1"
   },
   "dependencies": {
     "jest": "^29.7.0"
