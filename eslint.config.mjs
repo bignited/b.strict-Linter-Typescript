@@ -2,18 +2,25 @@
 'use strict';
 
 // Import the ESLint plugin
-import eslintPluginBstrict from 'eslint-plugin-bstrict/flat';
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import globals from 'globals';
+import pluginJs from '@eslint/js'
+import eslintPluginBstrict from 'eslint-plugin-bstrict';
+import stylisticJs from '@stylistic/eslint-plugin-js';
+import eslintPlugin from 'eslint-plugin-eslint-plugin';
+import nodePlugin from 'eslint-plugin-n';
 
 export default [
+  pluginJs.configs.recommended,
+  eslintPlugin.configs['flat/recommended'],
+  nodePlugin.configs['flat/recommended-script'],
   {
     files: ['**/*.js'],
     languageOptions: {
+      globals: globals.node,
       sourceType: 'module',
-      ecmaVersion: 'latest',
     },
     // Using the eslint-plugin-bstrict plugin defined locally
-    plugins: { 
+    plugins: {
       'bstrict': eslintPluginBstrict,
       '@stylistic/js': stylisticJs
     },
@@ -31,6 +38,14 @@ export default [
       '@stylistic/js/quotes': ['error', 'single', { avoidEscape: true }],
       'arrow-body-style': ['error', 'always'],
       '@typescript-eslint/no-explicit-any': 'off',
+
+      // Using the ESLint recommended rules by eslint-plugin-eslint-plugin
+      'eslint-plugin/require-meta-docs-description': 'error',
+      'eslint-plugin/meta-property-ordering': 'error',
+      'eslint-plugin/test-case-property-ordering': 'error',
+
+      // Using the ESLint recommended rules by eslint-plugin-n
+      'n/no-extraneous-require': ['error', { 'allowModules': ['jest-config'] }],
 
       // Using the rules defined in the eslint-plugin-bstrict plugin
       'bstrict/max-function-size': ['warn', 15],
