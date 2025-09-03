@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-bstrict",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "ESLint plugin for bstrict.",
   "main": "./dist/lib/flat.js",
   "keywords": [
