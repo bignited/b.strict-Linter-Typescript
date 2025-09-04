@@ -60,7 +60,7 @@ We also provide a recommended configuration so you can forego configuring _plugi
 
 ```js
 export default [
-  pluginBstrict.configs.recommended
+  pluginBstrict.configs.recommended.rules
   {
     rules: {
       // any other rules you want to add.
