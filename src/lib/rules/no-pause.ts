@@ -1,5 +1,5 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import { isCypressCallChained } from "../cypress-support/called-by-cypress";
 import { ESLint, RuleListener } from "@typescript-eslint/utils/ts-eslint";
 
@@ -27,16 +27,10 @@ function reportIfCypressPause(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noPause", []>
 ): void {
-  const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
-
   if (
     isCypressCallChained(node) &&
     isCallingPause(node) &&
-    !comments.has(node.loc.start.line - 1)
+    !nodeHasFullLineCommentAbove<"noPause">(node, context)
   ) {
     context.report({ node, messageId: "noPause" });
   }

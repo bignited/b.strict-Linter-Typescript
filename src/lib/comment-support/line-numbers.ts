@@ -1,4 +1,4 @@
-import { TSESTree } from "@typescript-eslint/utils";
+import { TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { SourceCode } from "@typescript-eslint/utils/ts-eslint";
 
 /**
@@ -23,6 +23,22 @@ export function getFullCommentLineNumbers(
   }
 
   return map;
+}
+
+/**
+ * Returns if the node has a full line comment above.
+ */
+export function nodeHasFullLineCommentAbove<T extends string>(
+  node: TSESTree.Node,
+  context: TSESLint.RuleContext<T, []>
+): boolean {
+  const sourceCode = context.sourceCode;
+  const comments = getFullCommentLineNumbers(
+    sourceCode.getAllComments(),
+    sourceCode
+  );
+
+  return comments.has(node.loc.start.line - 1);
 }
 
 /**

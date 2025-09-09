@@ -1,6 +1,6 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 
 /**
  * @fileoverview A rule to enforce no print statement calls.
@@ -17,19 +17,13 @@ function reportIfConsoleCall(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
-  const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
-
   if (
     node.callee.type === "MemberExpression" &&
     node.callee.object.type === "Identifier" &&
     node.callee.object.name === "console" &&
     node.callee.property.type === "Identifier" &&
     prohibitedConsoleMethods.has(node.callee.property.name) &&
-    !comments.has(node.loc.start.line - 1)
+    !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
     context.report({
       node,
@@ -48,16 +42,10 @@ function reportIfAlertCall(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
-  const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
-
   if (
     node.callee.type === "Identifier" &&
     node.callee.name === "alert" &&
-    !comments.has(node.loc.start.line - 1)
+    !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
     context.report({
       node,
@@ -76,19 +64,13 @@ function reportIfDocumentWriteCall(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
-  const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
-
   if (
     node.callee.type === "MemberExpression" &&
     node.callee.object.type === "Identifier" &&
     node.callee.object.name === "document" &&
     node.callee.property.type === "Identifier" &&
     node.callee.property.name === "write" &&
-    !comments.has(node.loc.start.line - 1)
+    !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
     context.report({
       node,

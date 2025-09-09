@@ -1,5 +1,5 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import type {
   Definition,
   Scope,
@@ -125,10 +125,6 @@ function reportIfCypressWait(
   context: TSESLint.RuleContext<"noUnnecessaryWaiting", []>
 ): void {
   const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
 
   if (isCallingCyWait(node)) {
     const scope =
@@ -136,7 +132,8 @@ function reportIfCypressWait(
 
     if (
       isIdentifierNumberConstArgument(node, scope) ||
-      (isNumberArgument(node) && !comments.has(node.loc.start.line - 1))
+      (isNumberArgument(node) &&
+        !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context))
     ) {
       context.report({ node, messageId: "noUnnecessaryWaiting" });
     }
