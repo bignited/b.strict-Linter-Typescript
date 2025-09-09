@@ -7,7 +7,7 @@ import type {
 } from "@typescript-eslint/scope-manager";
 
 /**
- * @fileoverview A rule to enforce no waiting time in Cypress tests, unless it is necessary for the test to pass you can put a comment above.
+ * @fileoverview A rule to enforce no waiting time in Cypress & Playwright tests, unless it is necessary for the test to pass you can put a comment above.
  * @author b.ignited
  */
 
@@ -51,6 +51,21 @@ function isCallingCyWait(node: TSESTree.Node): boolean {
     nodeIsCalledByCy(node) &&
     node.callee.property.type === "Identifier" &&
     node.callee.property.name === "wait"
+  );
+}
+
+/**
+ * Identifies if a node is a MemberExpression, Is called by page, Is an Identifier and property is waitForTimeout.
+ */
+function isCallingPageWaitForTimeout(node: TSESTree.CallExpression): boolean {
+  const callee = node.callee;
+
+  return (
+    callee.type === "MemberExpression" &&
+    callee.object.type === "Identifier" &&
+    callee.object.name === "page" &&
+    callee.property.type === "Identifier" &&
+    callee.property.name === "waitForTimeout"
   );
 }
 
@@ -131,12 +146,27 @@ function reportIfCypressWait(
       sourceCode.scopeManager?.acquire(node) ?? sourceCode.getScope(node);
 
     if (
-      isIdentifierNumberConstArgument(node, scope) ||
-      (isNumberArgument(node) &&
-        !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context))
+      (isIdentifierNumberConstArgument(node, scope) ||
+        isNumberArgument(node)) &&
+      !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context)
     ) {
       context.report({ node, messageId: "noUnnecessaryWaiting" });
     }
+  }
+}
+
+/**
+ * Reports if the node is page call and is calling waitForTimeout.
+ */
+function reportIfPlaywrightWait(
+  node: TSESTree.CallExpression,
+  context: TSESLint.RuleContext<"noUnnecessaryWaiting", []>
+): void {
+  if (
+    isCallingPageWaitForTimeout(node) &&
+    !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context)
+  ) {
+    context.report({ node, messageId: "noUnnecessaryWaiting" });
   }
 }
 
@@ -160,6 +190,7 @@ const rule = createRule({
     return {
       CallExpression(node) {
         reportIfCypressWait(node, context);
+        reportIfPlaywrightWait(node, context);
       },
     };
   },

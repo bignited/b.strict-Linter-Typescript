@@ -62,6 +62,10 @@ ruleTester.run("no-unnecessary-waiting", rule, {
     {
       code: "//this is a comment\n cy.wait(10)",
     },
+    // Test waitForTimeout is allowed when a full like comment is above
+    {
+      code: "// this is a comment \n page.waitForTimeout(5000)",
+    },
   ],
 
   invalid: [
@@ -122,6 +126,24 @@ ruleTester.run("no-unnecessary-waiting", rule, {
     //Test wait has an error when the line above is not a full line comment
     {
       code: "cy.visit(b.ignited) //this is a comment\n cy.wait(10)",
+      errors,
+    },
+
+    // Test waitForTimeout gives an error
+    {
+      code: "page.waitForTimeout(5000)",
+      errors,
+    },
+
+    // Test wait gives an error when the line above is not a full line comment
+    {
+      code: "page.goto(b.ignited) //this is a comment\n page.waitForTimeout(10)",
+      errors,
+    },
+
+    // Test that waitForTimeout gives an error when arbitrary number is through a variable
+    {
+      code: "const someNumber=500; page.waitForTimeout(someNumber)",
       errors,
     },
   ],
