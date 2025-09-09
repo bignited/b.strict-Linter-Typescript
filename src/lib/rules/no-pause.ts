@@ -1,7 +1,7 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
 import { isCypressCallChained } from "../cypress-support/called-by-cypress";
-import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
+import { ESLint, RuleListener } from "@typescript-eslint/utils/ts-eslint";
 
 /**
  * @fileoverview A rule to enforce no cy.pause() calls in Cypress tests, unless it is necessary for the test to pass you can put a comment above.
@@ -18,6 +18,28 @@ function isCallingPause(node: TSESTree.Node): boolean {
     node.callee.property.type === "Identifier" &&
     node.callee.property.name === "pause"
   );
+}
+
+/**
+ * Reports if the node is Cypress call and is calling pause.
+ */
+function reportIfCypressPause(
+  node: TSESTree.CallExpression,
+  context: TSESLint.RuleContext<"noPause", []>
+): void {
+  const sourceCode = context.sourceCode;
+  const comments = getFullCommentLineNumbers(
+    sourceCode.getAllComments(),
+    sourceCode
+  );
+
+  if (
+    isCypressCallChained(node) &&
+    isCallingPause(node) &&
+    !comments.has(node.loc.start.line - 1)
+  ) {
+    context.report({ node, messageId: "noPause" });
+  }
 }
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
@@ -37,29 +59,10 @@ const rule = createRule({
   },
   defaultOptions: [],
   create(context): RuleListener {
-    const sourceCode = context.sourceCode;
-    const comments = getFullCommentLineNumbers(
-      sourceCode.getAllComments(),
-      sourceCode
-    );
-
-    /**
-     * Check if the node is Cypress call and is calling pause.
-     */
-    function checkNodeIsCypressCallAndCallsPause(
-      node: TSESTree.CallExpression
-    ): void {
-      if (
-        isCypressCallChained(node) &&
-        isCallingPause(node) &&
-        !comments.has(node.loc.start.line - 1)
-      ) {
-        context.report({ node, messageId: "noPause" });
-      }
-    }
-
     return {
-      CallExpression: checkNodeIsCypressCallAndCallsPause,
+      CallExpression(node) {
+        reportIfCypressPause(node, context);
+      },
     };
   },
 });
