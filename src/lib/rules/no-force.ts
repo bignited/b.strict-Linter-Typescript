@@ -1,11 +1,9 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
-import { isCypressCall } from "../cypress-support/called-by-cypress";
-import { deepCheck } from "../cypress-support/chain-validator";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 
 /**
- * @fileoverview A rule to enforce no-force true in Cypress tests, unless it is necessary for the test to pass you can put a comment above.
+ * @fileoverview A rule to enforce no-force true in Cypress and Playwright tests, unless it is necessary for the test to pass you can put a comment above.
  * @author b.ignited
  */
 
@@ -14,6 +12,7 @@ import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
  */
 function isCallingClickOrType(node: TSESTree.Node): boolean {
   if (node.type !== "MemberExpression") return false;
+  if (node.property.type !== "Identifier") return false;
 
   const allowedMethods = [
     "click",
@@ -25,12 +24,11 @@ function isCallingClickOrType(node: TSESTree.Node): boolean {
     "rightclick",
     "focus",
     "select",
+    "fill",
   ];
 
-  return (
-    node.property.type === "Identifier" &&
-    allowedMethods.includes(node.property.name)
-  );
+  const methodName = node.property.name;
+  return allowedMethods.includes(methodName);
 }
 
 /**
@@ -39,29 +37,32 @@ function isCallingClickOrType(node: TSESTree.Node): boolean {
 function hasOptionForce(node: TSESTree.Node): boolean {
   if (node.type !== "CallExpression") return false;
 
-  return node.arguments.some(
-    (arg) =>
-      arg.type === "ObjectExpression" &&
-      arg.properties.some(
-        (prop) =>
-          prop.type === "Property" &&
-          prop.key.type === "Identifier" &&
-          prop.key.name === "force"
-      )
-  );
+  return node.arguments.some((arg) => {
+    if (arg.type !== "ObjectExpression") return false;
+
+    return arg.properties.some((prop) => {
+      return (
+        prop.type === "Property" &&
+        prop.key.type === "Identifier" &&
+        prop.key.name === "force" &&
+        prop.value.type === "Literal" &&
+        prop.value.value === true
+      );
+    });
+  });
 }
 
 /**
- * Reports if the node is Cypress call and has option force: true.
+ * Reports if the node is calling an action command that has option force: true.
  */
-function reportIfCypressForce(
+function reportIfForcedActionCommand(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noForce", []>
 ) {
   if (
-    isCypressCall(node) &&
-    deepCheck(node, isCallingClickOrType) &&
-    deepCheck(node, hasOptionForce) &&
+    node.callee.type === "MemberExpression" &&
+    isCallingClickOrType(node.callee) &&
+    hasOptionForce(node) &&
     !nodeHasFullLineCommentAbove<"noForce">(node, context)
   ) {
     context.report({ node, messageId: "noForce" });
@@ -87,7 +88,7 @@ const rule = createRule({
   create(context): RuleListener {
     return {
       CallExpression(node) {
-        reportIfCypressForce(node, context);
+        reportIfForcedActionCommand(node, context);
       },
     };
   },

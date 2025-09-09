@@ -75,6 +75,16 @@ ruleTester.run("no-force", rule, {
     {
       code: "// this is a comment\n cy.get('button').click({force: true})",
     },
+
+    // Test that force can be passed with value false
+    {
+      code: "cy.get('input').click({ force: false })",
+    },
+
+    // Test that I can force a custom action command
+    {
+      code: "locator.customClick({ force: true })",
+    },
   ],
   invalid: [
     // Test that does click function with force option
@@ -152,6 +162,12 @@ ruleTester.run("no-force", rule, {
     // Test that does default button click function with force option and no full line comment above it
     {
       code: "cy.visit('b.ignited') // this is a comment\n cy.get('button').click({force: true})",
+      errors,
+    },
+
+    // Test that forced uncheck action command gives error
+    {
+      code: "locator.uncheck({ force: true })",
       errors,
     },
   ],
