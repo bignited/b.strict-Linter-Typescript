@@ -1,5 +1,5 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import type {
   Definition,
   Scope,
@@ -117,6 +117,29 @@ function isIdentifierNumberConstArgument(
   return false;
 }
 
+/**
+ * Reports if the node is Cypress call and is calling wait.
+ */
+function reportIfCypressWait(
+  node: TSESTree.CallExpression,
+  context: TSESLint.RuleContext<"noUnnecessaryWaiting", []>
+): void {
+  const sourceCode = context.sourceCode;
+
+  if (isCallingCyWait(node)) {
+    const scope =
+      sourceCode.scopeManager?.acquire(node) ?? sourceCode.getScope(node);
+
+    if (
+      isIdentifierNumberConstArgument(node, scope) ||
+      (isNumberArgument(node) &&
+        !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context))
+    ) {
+      context.report({ node, messageId: "noUnnecessaryWaiting" });
+    }
+  }
+}
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
@@ -134,28 +157,10 @@ const rule = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const sourceCode = context.sourceCode;
-    const comments = getFullCommentLineNumbers(
-      sourceCode.getAllComments(),
-      sourceCode
-    );
-
-    function checkNodeIsCallingCyWait(node: TSESTree.CallExpression): void {
-      if (isCallingCyWait(node)) {
-        const scope =
-          sourceCode.scopeManager?.acquire(node) ?? sourceCode.getScope(node);
-
-        if (
-          isIdentifierNumberConstArgument(node, scope) ||
-          (isNumberArgument(node) && !comments.has(node.loc.start.line - 1))
-        ) {
-          context.report({ node, messageId: "noUnnecessaryWaiting" });
-        }
-      }
-    }
-
     return {
-      CallExpression: checkNodeIsCallingCyWait,
+      CallExpression(node) {
+        reportIfCypressWait(node, context);
+      },
     };
   },
 });

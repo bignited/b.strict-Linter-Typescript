@@ -1,5 +1,5 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import { isCypressCall } from "../cypress-support/called-by-cypress";
 import { deepCheck } from "../cypress-support/chain-validator";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
@@ -51,6 +51,23 @@ function hasOptionForce(node: TSESTree.Node): boolean {
   );
 }
 
+/**
+ * Reports if the node is Cypress call and has option force: true.
+ */
+function reportIfCypressForce(
+  node: TSESTree.CallExpression,
+  context: TSESLint.RuleContext<"noForce", []>
+) {
+  if (
+    isCypressCall(node) &&
+    deepCheck(node, isCallingClickOrType) &&
+    deepCheck(node, hasOptionForce) &&
+    !nodeHasFullLineCommentAbove<"noForce">(node, context)
+  ) {
+    context.report({ node, messageId: "noForce" });
+  }
+}
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
@@ -68,30 +85,10 @@ const rule = createRule({
   },
   defaultOptions: [],
   create(context): RuleListener {
-    const sourceCode = context.sourceCode;
-    const comments = getFullCommentLineNumbers(
-      sourceCode.getAllComments(),
-      sourceCode
-    );
-
-    /**
-     * Check if the node is Cypress call and has option force: true.
-     */
-    function checkNodeIsCypressCallAndHasOptionForce(
-      node: TSESTree.CallExpression
-    ): void {
-      if (
-        isCypressCall(node) &&
-        deepCheck(node, isCallingClickOrType) &&
-        deepCheck(node, hasOptionForce) &&
-        !comments.has(node.loc.start.line - 1)
-      ) {
-        context.report({ node, messageId: "noForce" });
-      }
-    }
-
     return {
-      CallExpression: checkNodeIsCypressCallAndHasOptionForce,
+      CallExpression(node) {
+        reportIfCypressForce(node, context);
+      },
     };
   },
 });

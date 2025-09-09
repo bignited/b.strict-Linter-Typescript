@@ -2,6 +2,7 @@ import maxFunctionSize from "./rules/max-function-size.js";
 import noForce from "./rules/no-force.js";
 import noPause from "./rules/no-pause.js";
 import noUnnecessaryWaiting from "./rules/no-unnecessary-waiting.js";
+import noPrint from "./rules/no-print.js";
 import { name, version } from "../../package.json";
 import globals from "globals";
 import { TSESLint } from "@typescript-eslint/utils";
@@ -17,6 +18,7 @@ const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "no-force": noForce,
   "no-pause": noPause,
   "no-unnecessary-waiting": noUnnecessaryWaiting,
+  "no-print": noPrint,
 };
 
 const commonGlobals: Record<string, boolean> = {
@@ -71,6 +73,7 @@ const plugin = {
         "bstrict/no-unnecessary-waiting": "error",
         "bstrict/no-force": "error",
         "bstrict/no-pause": "error",
+        "bstrict/no-print": "error",
       },
     },
   },

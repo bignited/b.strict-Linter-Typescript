@@ -1,4 +1,4 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
 import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
 
@@ -76,6 +76,42 @@ function validateLines(
   return lineCount;
 }
 
+/**
+ * Reports if the function size exceeds the maximum lines allowed
+ */
+function reportIfFunctionSizeExceedsLines(
+  funcNode: FunctionNodes,
+  context: TSESLint.RuleContext<"maxFunctionSize", [number]>,
+  maxLines: number
+): void {
+  const sourceCode = context.sourceCode;
+  const lines = sourceCode.lines;
+
+  const commentLineNumbers = getFullCommentLineNumbers(
+    sourceCode.getAllComments(),
+    sourceCode
+  );
+
+  const node = isEmbedded(funcNode) ? funcNode.parent : funcNode;
+
+  if (
+    node.type === "FunctionExpression" ||
+    node.type === "ArrowFunctionExpression"
+  ) {
+    if (isIIFE(node)) return;
+  }
+
+  const lineCount = validateLines(node, lines, commentLineNumbers) - 1;
+
+  if (lineCount >= maxLines) {
+    context.report({
+      node,
+      messageId: "maxFunctionSize",
+      data: { maxLines, lineCount },
+    });
+  }
+}
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
@@ -94,41 +130,16 @@ const rule = createRule({
   },
   defaultOptions: [15],
   create(context, [maxLines]) {
-    const sourceCode = context.sourceCode;
-    const lines = sourceCode.lines;
-
-    const commentLineNumbers = getFullCommentLineNumbers(
-      sourceCode.getAllComments(),
-      sourceCode
-    );
-
-    /**
-     * Count the lines in the function
-     */
-    function countLinesInFunction(funcNode: FunctionNodes): void {
-      const node = isEmbedded(funcNode) ? funcNode.parent : funcNode;
-      if (
-        node.type === "FunctionExpression" ||
-        node.type === "ArrowFunctionExpression"
-      ) {
-        if (isIIFE(node)) return;
-      }
-
-      const lineCount = validateLines(node, lines, commentLineNumbers) - 1;
-
-      if (lineCount >= maxLines) {
-        context.report({
-          node,
-          messageId: "maxFunctionSize",
-          data: { maxLines, lineCount },
-        });
-      }
-    }
-
     return {
-      FunctionDeclaration: countLinesInFunction,
-      FunctionExpression: countLinesInFunction,
-      ArrowFunctionExpression: countLinesInFunction,
+      FunctionDeclaration(node) {
+        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+      },
+      FunctionExpression(node) {
+        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+      },
+      ArrowFunctionExpression(node) {
+        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+      },
     };
   },
 });
