@@ -26,6 +26,18 @@ ruleTester.run("no-print", rule, {
     {
       code: '// console.log("This is a comment")',
     },
+    // Test console log works when line above is a full line comment
+    {
+      code: "// This is a commenr \n console.log()",
+    },
+    // Test alert works when line above is a full line comment
+    {
+      code: "// This is a commenr \n alert()",
+    },
+    // Test document write works when line above is a full line comment
+    {
+      code: "// This is a commenr \n document.write()",
+    },
   ],
 
   invalid: [
