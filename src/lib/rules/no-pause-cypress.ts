@@ -1,7 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import { isCypressCallChained } from "../cypress-support/called-by-cypress";
-import { ESLint, RuleListener } from "@typescript-eslint/utils/ts-eslint";
+import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 
 /**
  * @fileoverview A rule to enforce no cy.pause() calls in Cypress tests, unless it is necessary for the test to pass you can put a comment above.
@@ -25,30 +25,32 @@ function isCallingPause(node: TSESTree.Node): boolean {
  */
 function reportIfCypressPause(
   node: TSESTree.CallExpression,
-  context: TSESLint.RuleContext<"noPause", []>
+  context: TSESLint.RuleContext<"noPauseCypress", []>
 ): void {
   if (
     isCypressCallChained(node) &&
     isCallingPause(node) &&
-    !nodeHasFullLineCommentAbove<"noPause">(node, context)
+    !nodeHasFullLineCommentAbove<"noPauseCypress">(node, context)
   ) {
-    context.report({ node, messageId: "noPause" });
+    context.report({
+      node,
+      messageId: "noPauseCypress",
+    });
   }
 }
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
-  name: "noPause",
+  name: "noPauseCypress",
   meta: {
-    type: "problem",
+    type: "suggestion",
     docs: {
       description: "disallow using `cy.pause()` in Cypress tests",
     },
-    fixable: "code",
     schema: [],
     messages: {
-      noPause: "Do not use cy.pause()",
+      noPauseCypress: "Do not use cy.pause()",
     },
   },
   defaultOptions: [],

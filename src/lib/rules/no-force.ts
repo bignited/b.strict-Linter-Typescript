@@ -10,7 +10,7 @@ import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 /**
  * Identifies if a node is an Identifier and is within the allowed methods.
  */
-function isCallingClickOrType(node: TSESTree.Node): boolean {
+function isCallingAllowedMethod(node: TSESTree.Node): boolean {
   if (node.type !== "MemberExpression") return false;
   if (node.property.type !== "Identifier") return false;
 
@@ -34,7 +34,7 @@ function isCallingClickOrType(node: TSESTree.Node): boolean {
 /**
  * Identifies if a node is an ObjectExpression and has a force property.
  */
-function hasOptionForce(node: TSESTree.Node): boolean {
+function hasOptionForceTrue(node: TSESTree.Node): boolean {
   if (node.type !== "CallExpression") return false;
 
   return node.arguments.some((arg) => {
@@ -61,8 +61,8 @@ function reportIfForcedActionCommand(
 ) {
   if (
     node.callee.type === "MemberExpression" &&
-    isCallingClickOrType(node.callee) &&
-    hasOptionForce(node) &&
+    isCallingAllowedMethod(node.callee) &&
+    hasOptionForceTrue(node) &&
     !nodeHasFullLineCommentAbove<"noForce">(node, context)
   ) {
     context.report({ node, messageId: "noForce" });
@@ -74,11 +74,10 @@ const createRule = ESLintUtils.RuleCreator((name) => name);
 const rule = createRule({
   name: "noForce",
   meta: {
-    type: "problem",
+    type: "suggestion",
     docs: {
       description: "disallow using `force: true` with action commands.",
     },
-    fixable: "code",
     schema: [],
     messages: {
       noForce: "Do not use force on click and type calls.",

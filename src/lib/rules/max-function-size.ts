@@ -117,11 +117,10 @@ const createRule = ESLintUtils.RuleCreator((name) => name);
 const rule = createRule({
   name: "maxFunctionSize",
   meta: {
-    type: "problem",
+    type: "suggestion",
     docs: {
       description: "enforce a maximum function size of 15 lines.",
     },
-    fixable: "code",
     schema: [OPTIONS_SCHEMA],
     messages: {
       maxFunctionSize:
