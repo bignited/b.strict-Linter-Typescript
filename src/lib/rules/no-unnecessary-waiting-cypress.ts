@@ -55,21 +55,6 @@ function isCallingCyWait(node: TSESTree.Node): boolean {
 }
 
 /**
- * Identifies if a node is a MemberExpression, Is called by page, Is an Identifier and property is waitForTimeout.
- */
-function isCallingPageWaitForTimeout(node: TSESTree.CallExpression): boolean {
-  const callee = node.callee;
-
-  return (
-    callee.type === "MemberExpression" &&
-    callee.object.type === "Identifier" &&
-    callee.object.name === "page" &&
-    callee.property.type === "Identifier" &&
-    callee.property.name === "waitForTimeout"
-  );
-}
-
-/**
  * Identifies if a node is called by cy.
  */
 function nodeIsCalledByCy(node: TSESTree.Node): boolean {
@@ -137,7 +122,7 @@ function isIdentifierNumberConstArgument(
  */
 function reportIfCypressWait(
   node: TSESTree.CallExpression,
-  context: TSESLint.RuleContext<"noUnnecessaryWaiting", []>
+  context: TSESLint.RuleContext<"noUnnecessaryWaitingCypress", []>
 ): void {
   const sourceCode = context.sourceCode;
 
@@ -148,41 +133,28 @@ function reportIfCypressWait(
     if (
       (isIdentifierNumberConstArgument(node, scope) ||
         isNumberArgument(node)) &&
-      !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context)
+      !nodeHasFullLineCommentAbove<"noUnnecessaryWaitingCypress">(node, context)
     ) {
-      context.report({ node, messageId: "noUnnecessaryWaiting" });
+      context.report({
+        node,
+        messageId: "noUnnecessaryWaitingCypress",
+      });
     }
-  }
-}
-
-/**
- * Reports if the node is page call and is calling waitForTimeout.
- */
-function reportIfPlaywrightWait(
-  node: TSESTree.CallExpression,
-  context: TSESLint.RuleContext<"noUnnecessaryWaiting", []>
-): void {
-  if (
-    isCallingPageWaitForTimeout(node) &&
-    !nodeHasFullLineCommentAbove<"noUnnecessaryWaiting">(node, context)
-  ) {
-    context.report({ node, messageId: "noUnnecessaryWaiting" });
   }
 }
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
-  name: "no-unnecessary-waiting",
+  name: "no-unnecessary-waiting-cypress",
   meta: {
-    type: "problem",
+    type: "suggestion",
     docs: {
-      description: "disallow unnecessary waiting",
+      description: "disallow unnecessary waiting in Cypress tests",
     },
-    fixable: "code",
     schema: [],
     messages: {
-      noUnnecessaryWaiting: "Do not wait for arbitrary time periods",
+      noUnnecessaryWaitingCypress: "Do not wait for arbitrary time periods",
     },
   },
   defaultOptions: [],
@@ -190,7 +162,6 @@ const rule = createRule({
     return {
       CallExpression(node) {
         reportIfCypressWait(node, context);
-        reportIfPlaywrightWait(node, context);
       },
     };
   },
