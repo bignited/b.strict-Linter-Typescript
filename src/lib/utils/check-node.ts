@@ -9,6 +9,10 @@ function isNode(value: unknown): value is TSESTree.Node {
   );
 }
 
+function isNodeArray(value: unknown): value is TSESTree.Node[] {
+  return Array.isArray(value) && value.every(isNode);
+}
+
 function checkNode(
   node: TSESTree.Node,
   isAssertion: (node: TSESTree.CallExpression) => boolean,
@@ -23,17 +27,18 @@ function checkNode(
       key === "parent" ||
       key === "loc" ||
       key === "range" ||
-      key === "comments" ||
+      key === "type" ||
       key === "tokens" ||
       key === "leadingComments" ||
-      key === "trailingComments"
+      key === "trailingComments" ||
+      key === "comments"
     ) {
       continue;
     }
 
-    const value = (node as any)[key];
+    const value = node[key as keyof TSESTree.Node];
 
-    if (Array.isArray(value)) {
+    if (isNodeArray(value)) {
       for (const element of value) {
         if (isNode(element)) {
           checkNode(element, isAssertion, countObj);
