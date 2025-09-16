@@ -1,0 +1,65 @@
+import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
+import { countAssertions } from "../utils/check-node";
+
+function isCypressAssertion(node: TSESTree.CallExpression): boolean {
+  if (node.callee.type === "Identifier") {
+    return node.callee.name === "expect";
+  }
+
+  if (
+    node.callee.type === "MemberExpression" &&
+    node.callee.property.type === "Identifier" &&
+    node.callee.property.name === "should"
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function isCypressTestCall(callee: TSESTree.Node): boolean {
+  return callee.type === "Identifier" && callee.name === "it";
+}
+
+const createRule = ESLintUtils.RuleCreator((name) => name);
+
+const rule = createRule({
+  name: "oneAssertPerTestCypress",
+  meta: {
+    type: "suggestion",
+    docs: {
+      description: "disallow more than one assert inside a test block",
+    },
+    fixable: "code",
+    schema: [],
+    messages: {
+      oneAssertPerTestCypress:
+        "Do not use more than one assert inside your test",
+    },
+  },
+  defaultOptions: [],
+  create(context): RuleListener {
+    return {
+      CallExpression(node) {
+        if (
+          isCypressTestCall(node.callee) &&
+          node.arguments.length > 1 &&
+          node.arguments[1].type === "ArrowFunctionExpression" &&
+          node.arguments[1].body.type === "BlockStatement"
+        ) {
+          const block = node.arguments[1].body;
+          const assertionCount = countAssertions(block, isCypressAssertion);
+          if (assertionCount > 1) {
+            context.report({
+              node,
+              messageId: "oneAssertPerTestCypress",
+            });
+          }
+        }
+      },
+    };
+  },
+});
+
+export default rule;
