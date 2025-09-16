@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-pause";
+import rule from "../../src/lib/rules/no-pause-cypress";
 
 /**
  * @fileoverview Tests for no-pause.ts rule.
@@ -7,9 +7,11 @@ import rule from "../../src/lib/rules/no-pause";
  */
 
 const ruleTester = new RuleTester();
-const errors: [{ messageId: "noPause" }] = [{ messageId: "noPause" }];
+const errors: [{ messageId: "noPauseCypress" }] = [
+  { messageId: "noPauseCypress" },
+];
 
-ruleTester.run("no-pause", rule, {
+ruleTester.run("no-pause-cypress", rule, {
   valid: [
     // Test that regular pause function is called
     {
