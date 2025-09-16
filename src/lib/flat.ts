@@ -1,8 +1,7 @@
 import maxFunctionSize from "./rules/max-function-size.js";
 import noForce from "./rules/no-force.js";
-import noPauseCypress from "./rules/no-pause-cypress.js";
-import noUnnecessaryWaitingCypress from "./rules/no-unnecessary-waiting-cypress.js";
-import noUnnecessaryWaitingPlaywright from "./rules/no-unnecessary-waiting-playwright.js";
+import noPause from "./rules/no-pause.js";
+import noUnnecessaryWaiting from "./rules/no-unnecessary-waiting.js";
 import noPrint from "./rules/no-print.js";
 import { name, version } from "../../package.json";
 import globals from "globals";
@@ -17,9 +16,8 @@ import stylistic from "@stylistic/eslint-plugin";
 const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "max-function-size": maxFunctionSize,
   "no-force": noForce,
-  "no-pause-cypress": noPauseCypress,
-  "no-unnecessary-waiting-cypress": noUnnecessaryWaitingCypress,
-  "no-unnecessary-waiting-playwright": noUnnecessaryWaitingPlaywright,
+  "no-pause": noPause,
+  "no-unnecessary-waiting": noUnnecessaryWaiting,
   "no-print": noPrint,
 };
 
@@ -72,10 +70,9 @@ const plugin = {
 
         // Using the rules defined in the eslint-plugin-bstrict plugin
         "bstrict/max-function-size": ["warn", 15],
-        "bstrict/no-unnecessary-waiting-cypress": "error",
-        "bstrict/no-unnecessary-waiting-playwright": "error",
+        "bstrict/no-unnecessary-waiting": "error",
         "bstrict/no-force": "error",
-        "bstrict/no-pause-cypress": "error",
+        "bstrict/no-pause": "error",
         "bstrict/no-print": "error",
       },
     },

@@ -50,7 +50,7 @@ export default [
     },
     rules: {
       "bstrict/max-function-size": ["warn", 15],
-      "bstrict/no-unnecessary-waiting-cypress": "error",
+      "bstrict/no-unnecessary-waiting": "error",
     },
   },
 ];
@@ -97,12 +97,7 @@ All following rules are within recommended configuration
 
 ### ESLint rules
 
-| Name                                | Description                                                       | Configuration                                                                   |
-| ----------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `max-function-size`                 | Enforce a maximum function size of 15 lines by default.           | A numeric value can be passed to customize the maximum number of allowed lines. |
-| `no-force`                          | Disallow using `force: true` with action commands.                | -                                                                               |
-| `no-pause-cypress`                  | Disallow using `cy.pause()` in Cypress tests.                     | -                                                                               |
-| `no-print`                          | Disallow print/debug statements like `console.log`, `alert`, etc. | -                                                                               |
-| `no-unnecessary-waiting-cypress`    | Disallow unnecessary waiting in Cypress tests.                    | -                                                                               |
-| `no-unnecessary-waiting-playwright` | Disallow unnecessary waiting in Playwright tests.                 | -                                                                               |
-|  |
+| Name | Description | Configuration |
+| :--- | :---------- | :------------ |
+
+|

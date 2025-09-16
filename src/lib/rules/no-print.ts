@@ -31,9 +31,6 @@ function reportIfConsoleCall(
       data: {
         name: `console.${node.callee.property.name}`,
       },
-      fix: (fixer) => {
-        return fixer.remove(node);
-      },
     });
   }
 }
@@ -55,9 +52,6 @@ function reportIfAlertCall(
       messageId: "noPrint",
       data: {
         name: "alert",
-      },
-      fix: (fixer) => {
-        return fixer.remove(node);
       },
     });
   }
@@ -84,9 +78,6 @@ function reportIfDocumentWriteCall(
       data: {
         name: "document.write",
       },
-      fix: (fixer) => {
-        return fixer.remove(node);
-      },
     });
   }
 }
@@ -96,12 +87,11 @@ const createRule = ESLintUtils.RuleCreator((name) => name);
 const rule = createRule({
   name: "noPrint",
   meta: {
-    type: "suggestion",
+    type: "problem",
     docs: {
       description:
         "disallow print/debug statements like console.log, alert, etc.",
     },
-    fixable: "code",
     schema: [],
     messages: {
       noPrint: "Unexpected print statement: {{ name }}",

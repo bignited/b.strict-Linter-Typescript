@@ -22,9 +22,8 @@ export const recommended = {
 
     // Using the rules defined in the eslint-plugin-bstrict plugin
     "bstrict/max-function-size": ["warn", 15],
-    "bstrict/no-unnecessary-waiting-cypress": "error",
-    "bstrict/no-unnecessary-waiting-playwright": "error",
+    "bstrict/no-unnecessary-waiting": "error",
     "bstrict/no-force": "error",
-    "bstrict/no-pause-cypress": "error",
+    "bstrict/no-pause": "error",
   },
 };

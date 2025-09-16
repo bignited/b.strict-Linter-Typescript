@@ -1,17 +1,17 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-unnecessary-waiting-cypress";
+import rule from "../../src/lib/rules/no-unnecessary-waiting";
 
 /**
- * @fileoverview Tests for no-unnecessary-waiting-cypress.ts rule.
+ * @fileoverview Tests for no-unnecessary-waiting.ts rule.
  * @author b.ignited
  */
 
 const ruleTester = new RuleTester();
-const errors: [{ messageId: "noUnnecessaryWaitingCypress" }] = [
-  { messageId: "noUnnecessaryWaitingCypress" },
+const errors: [{ messageId: "noUnnecessaryWaiting" }] = [
+  { messageId: "noUnnecessaryWaiting" },
 ];
 
-ruleTester.run("no-unnecessary-waiting-cypress", rule, {
+ruleTester.run("no-unnecessary-waiting", rule, {
   valid: [
     // test that only cy can call for wait
     {
@@ -61,6 +61,10 @@ ruleTester.run("no-unnecessary-waiting-cypress", rule, {
     //Test wait works when the line above is a full line comment
     {
       code: "//this is a comment\n cy.wait(10)",
+    },
+    // Test waitForTimeout is allowed when a full like comment is above
+    {
+      code: "// this is a comment \n page.waitForTimeout(5000)",
     },
   ],
 
@@ -122,6 +126,24 @@ ruleTester.run("no-unnecessary-waiting-cypress", rule, {
     //Test wait has an error when the line above is not a full line comment
     {
       code: "cy.visit(b.ignited) //this is a comment\n cy.wait(10)",
+      errors,
+    },
+
+    // Test waitForTimeout gives an error
+    {
+      code: "page.waitForTimeout(5000)",
+      errors,
+    },
+
+    // Test wait gives an error when the line above is not a full line comment
+    {
+      code: "page.goto(b.ignited) //this is a comment\n page.waitForTimeout(10)",
+      errors,
+    },
+
+    // Test that waitForTimeout gives an error when arbitrary number is through a variable
+    {
+      code: "const someNumber=500; page.waitForTimeout(someNumber)",
       errors,
     },
   ],
