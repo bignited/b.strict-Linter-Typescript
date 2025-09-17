@@ -10,6 +10,7 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("one-assert-per-test-playwright", rule, {
   valid: [
+    // Test that a single expect is allowed
     {
       code: `
       test('single expect', () => {
@@ -17,6 +18,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       });
       `,
     },
+    // Test that a test without assertions is allowed
     {
       code: `
       test('no assertions', () => {
@@ -24,6 +26,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       });
       `,
     },
+    // Test that a single nested expect is allowed
     {
       code: `
       test('nested single expect', () => {
@@ -35,6 +38,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
     },
   ],
   invalid: [
+    // Test that multiple expects is not allowed
     {
       code: `
       test('two expects', () => {
@@ -44,6 +48,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       `,
       errors: [{ messageId: "oneAssertPerTestPlaywright" }],
     },
+    // Test that multiple nestes expects is not allowed
     {
       code: `
       test('multiple nested expects', () => {

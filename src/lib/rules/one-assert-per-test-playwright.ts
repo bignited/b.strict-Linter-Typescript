@@ -2,14 +2,23 @@ import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node";
 
+/**
+ * Determines whether the given call expression is a Playwright assertion, such as `expect()`.
+ */
 function isPlaywrightAssertion(node: TSESTree.CallExpression): boolean {
   return node.callee.type === "Identifier" && node.callee.name === "expect";
 }
 
+/**
+ * Determines whether the given callee node represents a Playwright test declaration, such as `test()`.
+ */
 function isPlaywrightTestCall(callee: TSESTree.Node): boolean {
   return callee.type === "Identifier" && callee.name === "test";
 }
 
+/**
+ * Reports if more than one direct assert is found inse the Playwright test block.
+ */
 function reportIfMoreThanOneAssertion(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"oneAssertPerTestPlaywright", []>

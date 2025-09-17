@@ -2,6 +2,9 @@ import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node";
 
+/**
+ * Determines whether the given call expression is a Cypress assertion, such as `expect()` or `should()`.
+ */
 function isCypressAssertion(node: TSESTree.CallExpression): boolean {
   if (node.callee.type === "Identifier") {
     return node.callee.name === "expect";
@@ -18,10 +21,16 @@ function isCypressAssertion(node: TSESTree.CallExpression): boolean {
   return false;
 }
 
+/**
+ * Determines whether the given callee node represents a Cypress test declaration, such as `it()`.
+ */
 function isCypressTestCall(callee: TSESTree.Node): boolean {
   return callee.type === "Identifier" && callee.name === "it";
 }
 
+/**
+ * Reports if more than one direct assert is found inse the Cypress test block.
+ */
 function reportIfMoreThanOneAssertion(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"oneAssertPerTestCypress", []>

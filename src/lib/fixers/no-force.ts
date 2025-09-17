@@ -1,5 +1,8 @@
 import { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
+/**
+ * Fixes no-force rule by removing the { force: true } argument from the action method.
+ */
 export function fixNoForce(
   node: TSESTree.CallExpression,
   fixer: TSESLint.RuleFixer,

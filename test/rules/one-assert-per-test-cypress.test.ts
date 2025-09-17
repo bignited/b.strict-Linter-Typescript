@@ -10,6 +10,7 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("one-assert-per-test-cypress", rule, {
   valid: [
+    // Test that a single expect assertion is allowed
     {
       code: `
       it('single expect assertion', () => {
@@ -17,6 +18,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       });
       `,
     },
+    // Test that a single should assertion is allowed
     {
       code: `
       it('single should assertion', () => {
@@ -24,6 +26,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       });
       `,
     },
+    // Test that a test without assertions is allowed
     {
       code: `
       it('no assertions', () => {
@@ -31,6 +34,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       });
       `,
     },
+    // Tes that a nested assert is allowed
     {
       code: `
       it('nested single assertion', () => {
@@ -42,6 +46,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
     },
   ],
   invalid: [
+    // Test that two expect assertions is not allowed
     {
       code: `
       it('two expects', () => {
@@ -51,6 +56,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       `,
       errors: [{ messageId: "oneAssertPerTestCypress" }],
     },
+    // Test that a combination of expect and assert is not allowed
     {
       code: `
       it('expect and should', () => {
@@ -60,6 +66,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       `,
       errors: [{ messageId: "oneAssertPerTestCypress" }],
     },
+    // Test that multiple nested assertions is not allowed
     {
       code: `
       it('multiple nested assertions', () => {

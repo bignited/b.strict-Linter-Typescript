@@ -33,8 +33,8 @@ const baseRules = {
 
   // Plugin base rules
   "bstrict/max-function-size": ["warn", 15],
-  "bstrict/no-force": "error",
-  "bstrict/no-print": "error",
+  "bstrict/no-force": "warn",
+  "bstrict/no-print": "warn",
 };
 
 const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
@@ -81,8 +81,8 @@ const cypress = {
   },
   rules: {
     ...baseRules,
-    "bstrict/no-unnecessary-waiting-cypress": "error",
-    "bstrict/no-pause-cypress": "error",
+    "bstrict/no-unnecessary-waiting-cypress": "warn",
+    "bstrict/no-pause-cypress": "warn",
     "bstrict/one-assert-per-test-cypress": "warn",
   },
 };
@@ -98,7 +98,7 @@ const playwright = {
   },
   rules: {
     ...baseRules,
-    "bstrict/no-unnecessary-waiting-playwright": "error",
+    "bstrict/no-unnecessary-waiting-playwright": "warn",
     "bstrict/one-assert-per-test-playwright": "warn",
   },
 };
