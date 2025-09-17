@@ -43,37 +43,37 @@ ruleTester.run("no-print", rule, {
   invalid: [
     // Test that console.log() gives error
     {
-      code: "console.log()",
+      code: "console.log();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "console.log" } }],
     },
     // Test that console.info() gives error
     {
-      code: "console.info()",
+      code: "console.info();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "console.info" } }],
     },
     // Test that console.warn() gives error
     {
-      code: "console.warn()",
+      code: "console.warn();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "console.warn" } }],
     },
     // Test that console.error() gives error
     {
-      code: "console.error()",
+      code: "console.error();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "console.error" } }],
     },
     // Test that alert() gives error
     {
-      code: "alert()",
+      code: "alert();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "alert" } }],
     },
     // Test that document.write() gives error
     {
-      code: "document.write()",
+      code: "document.write();",
       output: "",
       errors: [{ messageId: "noPrint", data: { name: "document.write" } }],
     },

@@ -1,6 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
+import { fixPrintStatement } from "../fixers/no-print";
 
 /**
  * @fileoverview A rule to enforce no print statement calls.
@@ -32,7 +33,7 @@ function reportIfConsoleCall(
         name: `console.${node.callee.property.name}`,
       },
       fix: (fixer) => {
-        return fixer.remove(node);
+        return fixPrintStatement(node, fixer);
       },
     });
   }
@@ -56,9 +57,7 @@ function reportIfAlertCall(
       data: {
         name: "alert",
       },
-      fix: (fixer) => {
-        return fixer.remove(node);
-      },
+      fix: (fixer) => fixPrintStatement(node, fixer),
     });
   }
 }
@@ -85,7 +84,7 @@ function reportIfDocumentWriteCall(
         name: "document.write",
       },
       fix: (fixer) => {
-        return fixer.remove(node);
+        return fixPrintStatement(node, fixer);
       },
     });
   }

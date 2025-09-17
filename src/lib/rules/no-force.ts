@@ -1,6 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
+import { fixNoForce } from "../fixers/no-force";
 
 /**
  * @fileoverview A rule to enforce no-force true in Cypress and Playwright tests, unless it is necessary for the test to pass you can put a comment above.
@@ -65,7 +66,11 @@ function reportIfForcedActionCommand(
     hasOptionForceTrue(node) &&
     !nodeHasFullLineCommentAbove<"noForce">(node, context)
   ) {
-    context.report({ node, messageId: "noForce" });
+    context.report({
+      node,
+      messageId: "noForce",
+      fix: (fixer) => fixNoForce(node, fixer, context),
+    });
   }
 }
 
@@ -78,6 +83,7 @@ const rule = createRule({
     docs: {
       description: "disallow using `force: true` with action commands.",
     },
+    fixable: "code",
     schema: [],
     messages: {
       noForce: "Do not use force on click and type calls.",

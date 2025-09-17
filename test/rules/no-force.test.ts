@@ -90,84 +90,99 @@ ruleTester.run("no-force", rule, {
     // Test that does click function with force option
     {
       code: "cy.get('button').click({force: true})",
+      output: "cy.get('button').click()",
       errors,
     },
 
     // Test that does double click function with force option
     {
       code: "cy.get('button').dblclick({force: true})",
+      output: "cy.get('button').dblclick()",
       errors,
     },
 
     // Test that does type function with force option
     {
       code: "cy.get('input').type('somth', {force: true})",
+      output: "cy.get('input').type('somth')",
       errors,
     },
 
     // Test that does type function with force option in chainable function
     {
       code: "cy.get('div').find('.foo').type('somth', {force: true})",
+      output: "cy.get('div').find('.foo').type('somth')",
       errors,
     },
 
     // Test that does click function with force option in chainable function
     {
       code: "cy.get('div').find('.foo').find('.bar').click({force: true})",
+      output: "cy.get('div').find('.foo').find('.bar').click()",
       errors,
     },
 
     // Test that does trigger function with force option in chainable function
     {
       code: "cy.get('div').find('.foo').find('.bar').trigger('change', {force: true})",
+      output: "cy.get('div').find('.foo').find('.bar').trigger('change')",
       errors,
     },
 
     // Test that does trigger function with force option
     {
       code: "cy.get('input').trigger('click', {force: true})",
+      output: "cy.get('input').trigger('click')",
       errors,
     },
 
     // Test that does rightclick function with force option
     {
       code: "cy.get('input').rightclick({force: true})",
+      output: "cy.get('input').rightclick()",
       errors,
     },
 
     // Test that does check function with force option
     {
       code: "cy.get('input').check({force: true})",
+      output: "cy.get('input').check()",
       errors,
     },
 
     // Test that does uncheck function with force option
     {
       code: "cy.get('input').uncheck({force: true})",
+      output: "cy.get('input').uncheck()",
       errors,
     },
 
     //Test that does select function with force option
     {
       code: "cy.get('input').select({force: true})",
+      output: "cy.get('input').select()",
       errors,
     },
 
     // Test that does focus function with force option
     {
       code: "cy.get('input').focus({force: true})",
+      output: "cy.get('input').focus()",
       errors,
     },
 
     // Test that does default button click function with force option and no full line comment above it
     {
       code: "cy.visit('b.ignited') // this is a comment\n cy.get('button').click({force: true})",
+      output:
+        "cy.visit('b.ignited') // this is a comment\n cy.get('button').click()",
       errors,
     },
 
     // Test that forced uncheck action command gives error
     {
       code: "locator.uncheck({ force: true })",
+      output: "locator.uncheck()",
       errors,
     },
   ],
