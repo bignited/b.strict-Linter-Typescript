@@ -1,4 +1,4 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node";
 
@@ -22,6 +22,27 @@ function isCypressTestCall(callee: TSESTree.Node): boolean {
   return callee.type === "Identifier" && callee.name === "it";
 }
 
+function reportIfMoreThanOneAssertion(
+  node: TSESTree.CallExpression,
+  context: TSESLint.RuleContext<"oneAssertPerTestCypress", []>
+) {
+  if (
+    isCypressTestCall(node.callee) &&
+    node.arguments.length > 1 &&
+    node.arguments[1].type === "ArrowFunctionExpression" &&
+    node.arguments[1].body.type === "BlockStatement"
+  ) {
+    const block = node.arguments[1].body;
+    const assertionCount = countAssertions(block, isCypressAssertion);
+    if (assertionCount > 1) {
+      context.report({
+        node,
+        messageId: "oneAssertPerTestCypress",
+      });
+    }
+  }
+}
+
 const createRule = ESLintUtils.RuleCreator((name) => name);
 
 const rule = createRule({
@@ -42,21 +63,7 @@ const rule = createRule({
   create(context): RuleListener {
     return {
       CallExpression(node) {
-        if (
-          isCypressTestCall(node.callee) &&
-          node.arguments.length > 1 &&
-          node.arguments[1].type === "ArrowFunctionExpression" &&
-          node.arguments[1].body.type === "BlockStatement"
-        ) {
-          const block = node.arguments[1].body;
-          const assertionCount = countAssertions(block, isCypressAssertion);
-          if (assertionCount > 1) {
-            context.report({
-              node,
-              messageId: "oneAssertPerTestCypress",
-            });
-          }
-        }
+        reportIfMoreThanOneAssertion(node, context);
       },
     };
   },
