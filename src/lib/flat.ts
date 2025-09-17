@@ -4,15 +4,38 @@ import noPauseCypress from "./rules/no-pause-cypress.js";
 import noUnnecessaryWaitingCypress from "./rules/no-unnecessary-waiting-cypress.js";
 import noUnnecessaryWaitingPlaywright from "./rules/no-unnecessary-waiting-playwright.js";
 import noPrint from "./rules/no-print.js";
+import oneAssertPerTestCypress from "./rules/one-assert-per-test-cypress.js";
+import oneAssertPerTestPlaywright from "./rules/one-assert-per-test-playwright.js";
 import { name, version } from "../../package.json";
 import globals from "globals";
 import { TSESLint } from "@typescript-eslint/utils";
 import stylistic from "@stylistic/eslint-plugin";
 
 /**
- * @fileoverview ESLint plugin with bstrict rules.
+ * @fileoverview ESLint plugin with b.strict rules.
  * @author b.ignited
  */
+
+const baseRules = {
+  // External base rules
+  "@stylistic/indent": ["error", 2],
+  complexity: ["error", 2],
+  "max-depth": ["error", 2],
+  "max-lines": "error",
+  "no-irregular-whitespace": "error",
+  "no-prototype-builtins": "off",
+  "@stylistic/no-multi-spaces": "error",
+  "prefer-const": "off",
+  "@stylistic/space-before-function-paren": "off",
+  "@stylistic/quotes": ["error", "single", { avoidEscape: true }],
+  "arrow-body-style": ["error", "always"],
+  "@stylistic/no-explicit-any": "off",
+
+  // Plugin base rules
+  "bstrict/max-function-size": ["warn", 15],
+  "bstrict/no-force": "error",
+  "bstrict/no-print": "error",
+};
 
 const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "max-function-size": maxFunctionSize,
@@ -21,6 +44,8 @@ const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "no-unnecessary-waiting-cypress": noUnnecessaryWaitingCypress,
   "no-unnecessary-waiting-playwright": noUnnecessaryWaitingPlaywright,
   "no-print": noPrint,
+  "one-assert-per-test-cypress": oneAssertPerTestCypress,
+  "one-assert-per-test-playwright": oneAssertPerTestPlaywright,
 };
 
 const commonGlobals: Record<string, boolean> = {
@@ -33,53 +58,58 @@ const commonGlobals: Record<string, boolean> = {
   ...globals.mocha,
 };
 
-const plugin = {
+const recommended = {
+  name: "bstrict/recommended",
+  plugins: {
+    bstrict: { rules },
+    "@stylistic": stylistic,
+  },
+  languageOptions: {
+    globals: commonGlobals,
+  },
+  rules: baseRules,
+};
+
+const cypress = {
+  name: "bstrict/cypress",
+  plugins: {
+    bstrict: { rules },
+    "@stylistic": stylistic,
+  },
+  languageOptions: {
+    globals: commonGlobals,
+  },
+  rules: {
+    ...baseRules,
+    "bstrict/no-unnecessary-waiting-cypress": "error",
+    "bstrict/no-pause-cypress": "error",
+    "bstrict/one-assert-per-test-cypress": "warn",
+  },
+};
+
+const playwright = {
+  name: "bstrict/playwright",
+  plugins: {
+    bstrict: { rules },
+    "@stylistic": stylistic,
+  },
+  languageOptions: {
+    globals: commonGlobals,
+  },
+  rules: {
+    ...baseRules,
+    "bstrict/no-unnecessary-waiting-playwright": "error",
+    "bstrict/one-assert-per-test-playwright": "warn",
+  },
+};
+
+module.exports = {
   name: "bstrict",
   meta: { name, version },
   rules,
   configs: {
-    globals: {
-      plugins: {
-        bstrict: { rules },
-      },
-      languageOptions: {
-        globals: commonGlobals,
-      },
-    },
-    recommended: {
-      name: "bstrict/recommended",
-      plugins: {
-        bstrict: { rules },
-        "@stylistic": stylistic,
-      },
-      languageOptions: {
-        globals: commonGlobals,
-      },
-      rules: {
-        // Using the ESLint recommended rules by b.ignited
-        "@stylistic/indent": ["error", 2],
-        complexity: ["error", 2],
-        "max-depth": ["error", 2],
-        "max-lines": "error",
-        "no-irregular-whitespace": "error",
-        "no-prototype-builtins": "off",
-        "@stylistic/no-multi-spaces": "error",
-        "prefer-const": "off",
-        "@stylistic/space-before-function-paren": "off",
-        "@stylistic/quotes": ["error", "single", { avoidEscape: true }],
-        "arrow-body-style": ["error", "always"],
-        "@stylistic/no-explicit-any": "off",
-
-        // Using the rules defined in the eslint-plugin-bstrict plugin
-        "bstrict/max-function-size": ["warn", 15],
-        "bstrict/no-unnecessary-waiting-cypress": "error",
-        "bstrict/no-unnecessary-waiting-playwright": "error",
-        "bstrict/no-force": "error",
-        "bstrict/no-pause-cypress": "error",
-        "bstrict/no-print": "error",
-      },
-    },
+    recommended,
+    cypress,
+    playwright,
   },
 };
-
-module.exports = plugin;

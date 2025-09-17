@@ -34,19 +34,47 @@ yarn add --dev eslint-plugin-bstrict
 
 ESLint `v9` and above uses a [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files) format with filename `eslint.config.*js` by default. Please refer to [Flat config](#eslint-v9-or-above).
 
-If you want to use ESLint `v9` or above with [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files), then add an `eslint.config.js` file to the root directory of your project with the contents shown below.
+**_Important_**: Merging _languageOptions_
+ESLint Flat Config does not deep-merge configuration objects. If you add custom parser options, make sure to merge the plugin's _languageOptions.globals_ manually, or they will be overwritten.
 
 ```js
 import pluginBstrict from "eslint-plugin-bstrict";
+import parser from "@typescript-eslint/parser";
+import stylistic from "@stylistic/eslint-plugin";
+
+export default [
+  {
+    files: ["**/*.ts"],
+    languageOptions: {
+      parser: parser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      globals: {
+        ...pluginBstrict.configs.recommended.languageOptions?.globals,
+      },
+    },
+    plugins: {
+      pluginBstrict: pluginBstrict,
+      "@stylistic": stylistic,
+    },
+    rules: pluginBstrict.configs.playwright.rules,
+  },
+];
 ```
 
-Since we now have the flat configurations available you can add rules individually:
+It is also possible to define individual rules:
 
 ```js
+import pluginBstrict from "eslint-plugin-bstrict";
+import stylistic from "@stylistic/eslint-plugin";
+
 export default [
   {
     plugins: {
       bstrict: pluginBstrict,
+      "@stylistic":
     },
     rules: {
       "bstrict/max-function-size": ["warn", 15],
@@ -56,17 +84,18 @@ export default [
 ];
 ```
 
-We also provide a recommended configuration so you can forego configuring _plugins_, _rules_ individually. See [recommended rules](#rules) for which rules are included.
+We also provide a recommended and tool-specific configuration so you can forego configuring _plugins_, _rules_ individually. See [recommended rules](#rules) for which rules are included.
 
 ```js
 export default [
-  pluginBstrict.configs.recommended.rules
   {
-    rules: {
-      // any other rules you want to add.
-    }
-  }
-]
+    plugins: {
+      bstrict: bstrict,
+      "@stylistic": stylistic,
+    },
+    rules: bstrict.configs.playwright.rules,
+  },
+];
 ```
 
 ## Disable rules
@@ -95,14 +124,17 @@ For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/
 
 All following rules are within recommended configuration
 
+**Both `cypress` and `playwright` rules have the `recommended` rules included**
+
 ### ESLint rules
 
-| Name                                | Description                                                       | Configuration                                                                   |
-| ----------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `max-function-size`                 | Enforce a maximum function size of 15 lines by default.           | A numeric value can be passed to customize the maximum number of allowed lines. |
-| `no-force`                          | Disallow using `force: true` with action commands.                | -                                                                               |
-| `no-pause-cypress`                  | Disallow using `cy.pause()` in Cypress tests.                     | -                                                                               |
-| `no-print`                          | Disallow print/debug statements like `console.log`, `alert`, etc. | -                                                                               |
-| `no-unnecessary-waiting-cypress`    | Disallow unnecessary waiting in Cypress tests.                    | -                                                                               |
-| `no-unnecessary-waiting-playwright` | Disallow unnecessary waiting in Playwright tests.                 | -                                                                               |
-|  |
+| Rule Name                         | Description                                                                                                                                                                                            | Configuration                                                                   | Fixable | Included in   |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | ------- | ------------- |
+| max-function-size                 | Enforce a maximum function size of 15 lines by default.                                                                                                                                                | A numeric value can be passed to customize the maximum number of allowed lines. |         | `recommended` |
+| no-force                          | Disallow using `force: true` with action commands.                                                                                                                                                     | -                                                                               |         | `recommended` |
+| no-print                          | Disallow print/debug statements like `console.log`, `alert`, etc                                                                                                                                       | -                                                                               |         | `recommended` |
+| no-pause-cypress                  | Disallow using `cy.pause()` in Cypress tests.                                                                                                                                                          | -                                                                               |         | `cypress`     |
+| no-unnecessary-waiting-cypress    | Disallow unnecessary waiting with numeric values in Cypress tests.                                                                                                                                     | -                                                                               |         | `cypress`     |
+| one-assert-per-test-cypress       | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               |         | `cypress`     |
+| no-unnecessary-waiting-playwright | Disallow unnecessary waiting in Playwright tests.                                                                                                                                                      | -                                                                               |         | `playwright`  |
+| one-assert-per-test-playwright    | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               |         | `playwright`  |
