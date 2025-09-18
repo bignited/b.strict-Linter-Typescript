@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/max-function-size";
+import rule from "../../dist/lib/rules/max-function-size.js";
 
 /**
  * @fileoverview Tests for max-function-size.ts rule.

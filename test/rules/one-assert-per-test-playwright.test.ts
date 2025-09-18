@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/one-assert-per-test-playwright";
+import rule from "../../dist/lib/rules/one-assert-per-test-playwright.js";
 
 /**
  * @fileoverview Tests for one-assert-per-test-playwright.ts rule.

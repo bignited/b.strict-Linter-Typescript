@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-unnecessary-waiting-playwright";
+import rule from "../../dist/lib/rules/no-unnecessary-waiting-playwright.js";
 
 /**
  * @fileoverview Tests for no-unnecessary-waiting-playwright.ts rule.

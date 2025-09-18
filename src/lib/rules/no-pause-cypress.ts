@@ -1,7 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
-import { isCypressCallChained } from "../cypress-support/called-by-cypress";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { isCypressCallChained } from "../cypress-support/called-by-cypress.js";
 
 /**
  * @fileoverview A rule to enforce no cy.pause() calls in Cypress tests, unless it is necessary for the test to pass you can put a comment above.

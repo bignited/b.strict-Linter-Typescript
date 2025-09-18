@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/one-assert-per-test-cypress";
+import rule from "../../dist/lib/rules/one-assert-per-test-cypress.js";
 
 /**
  * @fileoverview Tests for one-assert-per-test-cypress.ts rule.

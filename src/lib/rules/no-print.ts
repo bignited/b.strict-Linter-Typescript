@@ -1,7 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
-import { fixPrintStatement } from "../fixers/no-print";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { fixPrintStatement } from "../fixers/no-print.js";
 
 /**
  * @fileoverview A rule to enforce no print statement calls.

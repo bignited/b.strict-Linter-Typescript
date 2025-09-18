@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-pause-cypress";
+import rule from "../../dist/lib/rules/no-pause-cypress.js";
 
 /**
  * @fileoverview Tests for no-pause.ts rule.

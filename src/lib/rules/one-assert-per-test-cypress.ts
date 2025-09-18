@@ -1,6 +1,6 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { countAssertions } from "../utils/check-node";
+import { countAssertions } from "../utils/check-node.js";
 
 /**
  * Determines whether the given call expression is a Cypress assertion, such as `expect()` or `should()`.
