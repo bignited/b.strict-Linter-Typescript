@@ -29,8 +29,8 @@
   "author": "b.ignited",
   "license": "ISC",
   "peerDependencies": {
-    "@stylistic/eslint-plugin": "^2.12.0",
-    "eslint": ">=9.0.0"
+    "@stylistic/eslint-plugin": ">=2.12.0 <4.0.0",
+    "eslint": ">=9.0.0 <9.35.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.12.0",
