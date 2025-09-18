@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules jest --silent"
+    "test": "npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "author": "b.ignited",
   "license": "ISC",
