@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules jest --silent"
   },
   "author": "b.ignited",
   "license": "ISC",
@@ -38,6 +38,7 @@
     "@typescript-eslint/parser": "^8.37.0",
     "@typescript-eslint/rule-tester": "^8.37.0",
     "@typescript-eslint/scope-manager": "^8.37.0",
+    "cross-env": "^10.0.0",
     "eslint": "^9.16.0",
     "eslint-plugin-eslint-plugin": "^6.3.2",
     "eslint-plugin-n": "^17.14.0",
