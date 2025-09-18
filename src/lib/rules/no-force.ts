@@ -1,7 +1,7 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { fixNoForce } from "../fixers/no-force";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { fixNoForce } from "../fixers/no-force.js";
 
 /**
  * @fileoverview A rule to enforce no-force true in Cypress and Playwright tests, unless it is necessary for the test to pass you can put a comment above.

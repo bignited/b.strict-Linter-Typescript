@@ -1,3 +1,7 @@
+import pkg from "../../package.json" assert { type: "json" };
+import globals from "globals";
+import { TSESLint } from "@typescript-eslint/utils";
+import stylistic from "@stylistic/eslint-plugin";
 import maxFunctionSize from "./rules/max-function-size.js";
 import noForce from "./rules/no-force.js";
 import noPauseCypress from "./rules/no-pause-cypress.js";
@@ -6,10 +10,6 @@ import noUnnecessaryWaitingPlaywright from "./rules/no-unnecessary-waiting-playw
 import noPrint from "./rules/no-print.js";
 import oneAssertPerTestCypress from "./rules/one-assert-per-test-cypress.js";
 import oneAssertPerTestPlaywright from "./rules/one-assert-per-test-playwright.js";
-import { name, version } from "../../package.json";
-import globals from "globals";
-import { TSESLint } from "@typescript-eslint/utils";
-import stylistic from "@stylistic/eslint-plugin";
 
 /**
  * @fileoverview ESLint plugin with b.strict rules.
@@ -103,9 +103,9 @@ const playwright = {
   },
 };
 
-module.exports = {
+export default {
   name: "bstrict",
-  meta: { name, version },
+  meta: { name: pkg.name, version: pkg.version },
   rules,
   configs: {
     recommended,

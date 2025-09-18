@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-print";
+import rule from "../../dist/lib/rules/no-print.js";
 
 /**
  * @fileoverview Tests for no-print.ts rule.

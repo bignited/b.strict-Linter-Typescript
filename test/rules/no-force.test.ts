@@ -1,5 +1,5 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import rule from "../../src/lib/rules/no-force";
+import rule from "../../dist/lib/rules/no-force.js";
 
 /**
  * @fileoverview Tests for no-force.ts rule.

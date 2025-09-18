@@ -1,10 +1,10 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 import type {
   Definition,
   Scope,
   Reference,
 } from "@typescript-eslint/scope-manager";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 
 /**
  * @fileoverview A rule to enforce no waiting time in Cypress & Playwright tests, unless it is necessary for the test to pass you can put a comment above.

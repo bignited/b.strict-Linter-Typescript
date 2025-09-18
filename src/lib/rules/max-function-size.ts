@@ -1,6 +1,6 @@
 import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
 import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers";
+import { getFullCommentLineNumbers } from "../comment-support/line-numbers.js";
 
 /**
  * @fileoverview A rule to enforce a maximum function size of 15 lines.
