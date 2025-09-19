@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.5](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.4...v4.1.5) (2025-09-19)
+
+
+### Bug Fixes
+
+* add build and test steps to release action ([d66a6d1](https://github.com/bignited/b.strict-Linter-Javascript/commit/d66a6d189f79c9f580e8a5ead57ac79c559a5747))
+
 ## [4.1.4](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.3...v4.1.4) (2025-09-19)
 
 
