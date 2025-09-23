@@ -1,6 +1,6 @@
 import { TSESTree } from "@typescript-eslint/utils";
 
-function isNode(value: unknown): value is TSESTree.Node {
+export function isNode(value: unknown): value is TSESTree.Node {
   return (
     typeof value === "object" &&
     value !== null &&
