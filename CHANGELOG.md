@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.6](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.5...v4.1.6) (2025-09-23)
+
+
+### Bug Fixes
+
+* updated readme with correct stylistic version peer dependency ([bc46802](https://github.com/bignited/b.strict-Linter-Javascript/commit/bc46802a77e754bbaf67cf552beb60df735c7d37))
+* updated stylistic version ([9f0bbd3](https://github.com/bignited/b.strict-Linter-Javascript/commit/9f0bbd3c860373bc2dcdfef2101e870a8350268e))
+
 ## [4.1.5](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.4...v4.1.5) (2025-09-19)
 
 
