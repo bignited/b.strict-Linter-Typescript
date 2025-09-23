@@ -14,7 +14,7 @@ An [ESLint](https://eslint.org) plugin for [b.ignited](https://bignited.be).
 This plugin supports the use of [Flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) with ESLint `9.0.0` and above.
 
 [Stylistic](https://www.npmjs.com/package/@stylistic/eslint-plugin)
-Required since some rules within the recommended come from this package. version `2.12.0` and above.
+Required since some rules within the recommended come from this package. version `5.4.0` and above.
 
 ## Installation
 
