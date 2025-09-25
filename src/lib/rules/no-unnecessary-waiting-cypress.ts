@@ -1,4 +1,9 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import type {
   Definition,
   Scope,
@@ -19,9 +24,9 @@ function isVariableInitializedWithNumber(
 ): def is Extract<Definition, { type: "Variable" }> {
   return (
     def.type === "Variable" &&
-    def.node.type === "VariableDeclarator" &&
+    def.node.type === AST_NODE_TYPES.VariableDeclarator &&
     !!def.node.init &&
-    def.node.init.type === "Literal" &&
+    def.node.init.type === AST_NODE_TYPES.Literal &&
     typeof def.node.init.value === "number"
   );
 }
@@ -35,8 +40,8 @@ function isParameterWithNumericDefault(def: Definition): boolean {
   const param = def.name.parent;
 
   return (
-    param?.type === "AssignmentPattern" &&
-    param.right.type === "Literal" &&
+    param?.type === AST_NODE_TYPES.AssignmentPattern &&
+    param.right.type === AST_NODE_TYPES.Literal &&
     typeof param.right.value === "number"
   );
 }
@@ -46,10 +51,10 @@ function isParameterWithNumericDefault(def: Definition): boolean {
  */
 function isCallingCyWait(node: TSESTree.Node): boolean {
   return (
-    node.type === "CallExpression" &&
-    node.callee.type === "MemberExpression" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
     nodeIsCalledByCy(node) &&
-    node.callee.property.type === "Identifier" &&
+    node.callee.property.type === AST_NODE_TYPES.Identifier &&
     node.callee.property.name === "wait"
   );
 }
@@ -58,19 +63,19 @@ function isCallingCyWait(node: TSESTree.Node): boolean {
  * Identifies if a node is called by cy.
  */
 function nodeIsCalledByCy(node: TSESTree.Node): boolean {
-  if (node.type === "Identifier" && node.name === "cy") {
+  if (node.type === AST_NODE_TYPES.Identifier && node.name === "cy") {
     return true;
   }
 
   if (
-    node.type === "CallExpression" &&
-    node.callee.type === "MemberExpression" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
     node.callee.object
   ) {
     return nodeIsCalledByCy(node.callee.object);
   }
 
-  if (node.type === "MemberExpression" && node.object) {
+  if (node.type === AST_NODE_TYPES.MemberExpression && node.object) {
     return nodeIsCalledByCy(node.object);
   }
 
@@ -82,9 +87,9 @@ function nodeIsCalledByCy(node: TSESTree.Node): boolean {
  */
 function isNumberArgument(node: TSESTree.Node): boolean {
   if (
-    node.type === "CallExpression" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
     node.arguments.length > 0 &&
-    node.arguments[0].type === "Literal" &&
+    node.arguments[0].type === AST_NODE_TYPES.Literal &&
     typeof node.arguments[0].value === "number"
   ) {
     return true;
@@ -102,7 +107,7 @@ function isIdentifierNumberConstArgument(
   if (node.arguments.length === 0) return false;
 
   const firstArg = node.arguments[0];
-  if (firstArg.type !== "Identifier") return false;
+  if (firstArg.type !== AST_NODE_TYPES.Identifier) return false;
 
   const ref: Reference | undefined = scope.references.find(
     (ref) => ref.identifier === firstArg

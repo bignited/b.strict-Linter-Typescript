@@ -1,4 +1,4 @@
-import { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 
 export function isNode(value: unknown): value is TSESTree.Node {
   return (
@@ -18,7 +18,7 @@ function checkNode(
   isAssertion: (node: TSESTree.CallExpression) => boolean,
   countObj: { count: number }
 ): void {
-  if (node.type === "CallExpression" && isAssertion(node)) {
+  if (node.type === AST_NODE_TYPES.CallExpression && isAssertion(node)) {
     countObj.count++;
   }
 

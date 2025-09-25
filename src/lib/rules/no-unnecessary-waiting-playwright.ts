@@ -1,4 +1,9 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 
 /**
@@ -13,10 +18,10 @@ function isCallingPageWaitForTimeout(node: TSESTree.CallExpression): boolean {
   const callee = node.callee;
 
   return (
-    callee.type === "MemberExpression" &&
-    callee.object.type === "Identifier" &&
+    callee.type === AST_NODE_TYPES.MemberExpression &&
+    callee.object.type === AST_NODE_TYPES.Identifier &&
     callee.object.name === "page" &&
-    callee.property.type === "Identifier" &&
+    callee.property.type === AST_NODE_TYPES.Identifier &&
     callee.property.name === "waitForTimeout"
   );
 }
