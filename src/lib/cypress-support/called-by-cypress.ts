@@ -1,4 +1,4 @@
-import { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 
 /**
  * @fileoverview cypress helper functions for the bstrict plugin.
@@ -10,8 +10,8 @@ import { TSESTree } from "@typescript-eslint/utils";
  */
 export function isCypressCall(node: TSESTree.CallExpression): boolean {
   return (
-    node.callee.type === "MemberExpression" &&
-    node.callee.object.type === "Identifier" &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
+    node.callee.object.type === AST_NODE_TYPES.Identifier &&
     node.callee.object.name === "cy"
   );
 }
@@ -22,24 +22,18 @@ export function isCypressCall(node: TSESTree.CallExpression): boolean {
 export function isCypressCallChained(
   node: TSESTree.Node | null | undefined
 ): boolean {
+  if (!node) return false;
+
   if (
-    node?.type === "CallExpression" &&
-    node.callee.type === "MemberExpression"
+    node.type === AST_NODE_TYPES.CallExpression &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression
   ) {
-    const object = node.callee.object;
-
-    if (object.type == "Identifier" && object.name === "cy") return true;
-
-    return isCypressCallChained(object);
+    return isCypressCallChained(node.callee.object);
   }
 
-  if (node?.type === "MemberExpression") {
-    const object = node.object;
-
-    if (object.type === "Identifier" && object.name === "cy") return true;
-
-    return isCypressCallChained(object);
+  if (node.type === AST_NODE_TYPES.MemberExpression) {
+    return isCypressCallChained(node.object);
   }
 
-  return false;
+  return node.type === AST_NODE_TYPES.Identifier && node.name === "cy";
 }

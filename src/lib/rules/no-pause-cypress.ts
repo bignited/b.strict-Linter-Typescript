@@ -1,4 +1,9 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 import { isCypressCallChained } from "../cypress-support/called-by-cypress.js";
@@ -13,9 +18,9 @@ import { isCypressCallChained } from "../cypress-support/called-by-cypress.js";
  */
 function isCallingPause(node: TSESTree.Node): boolean {
   return (
-    node.type === "CallExpression" &&
-    node.callee.type === "MemberExpression" &&
-    node.callee.property.type === "Identifier" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
+    node.callee.property.type === AST_NODE_TYPES.Identifier &&
     node.callee.property.name === "pause"
   );
 }

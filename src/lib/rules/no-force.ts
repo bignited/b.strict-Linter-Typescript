@@ -1,4 +1,9 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 import { fixNoForce } from "../fixers/no-force.js";
@@ -36,17 +41,17 @@ function isCallingAllowedMethod(node: TSESTree.Node): boolean {
  * Identifies if a node is an ObjectExpression and has a force property.
  */
 function hasOptionForceTrue(node: TSESTree.Node): boolean {
-  if (node.type !== "CallExpression") return false;
+  if (node.type !== AST_NODE_TYPES.CallExpression) return false;
 
   return node.arguments.some((arg) => {
-    if (arg.type !== "ObjectExpression") return false;
+    if (arg.type !== AST_NODE_TYPES.ObjectExpression) return false;
 
     return arg.properties.some((prop) => {
       return (
-        prop.type === "Property" &&
-        prop.key.type === "Identifier" &&
+        prop.type === AST_NODE_TYPES.Property &&
+        prop.key.type === AST_NODE_TYPES.Identifier &&
+        prop.value.type === AST_NODE_TYPES.Literal &&
         prop.key.name === "force" &&
-        prop.value.type === "Literal" &&
         prop.value.value === true
       );
     });
@@ -61,7 +66,7 @@ function reportIfForcedActionCommand(
   context: TSESLint.RuleContext<"noForce", []>
 ) {
   if (
-    node.callee.type === "MemberExpression" &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
     isCallingAllowedMethod(node.callee) &&
     hasOptionForceTrue(node) &&
     !nodeHasFullLineCommentAbove<"noForce">(node, context)

@@ -72,9 +72,10 @@ import stylistic from "@stylistic/eslint-plugin";
 
 export default [
   {
+    files: ["**/*.ts"],
     plugins: {
       bstrict: pluginBstrict,
-      "@stylistic":
+      "@stylistic": stylistic,
     },
     rules: {
       "bstrict/max-function-size": ["warn", 15],
@@ -89,6 +90,7 @@ We also provide a recommended and tool-specific configuration so you can forego 
 ```js
 export default [
   {
+    files: ["**/*.ts"],
     plugins: {
       bstrict: bstrict,
       "@stylistic": stylistic,
@@ -118,6 +120,13 @@ function foo() {
 /* eslint-enable bstrict/max-function-size */
 ```
 
+It is also possible to ignore the rules by placing a full-line comment right above them. The plugin will treat that as an explanation to the piece of code:
+
+```js
+// A force here is necessary because X.
+cy.get("selector").click({ force: true });
+```
+
 For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/rules) documentation.
 
 ## Rules
@@ -128,13 +137,14 @@ All following rules are within recommended configuration
 
 ### ESLint rules
 
-| Rule Name                         | Description                                                                                                                                                                                            | Configuration                                                                   | Fixable by code                   | Included in   |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------- | ------------- |
-| max-function-size                 | Enforce a maximum function size of 15 lines by default.                                                                                                                                                | A numeric value can be passed to customize the maximum number of allowed lines. | no                                | `recommended` |
-| no-force                          | Disallow using `force: true` with action commands.                                                                                                                                                     | -                                                                               | yes - removes the force argument  | `recommended` |
-| no-print                          | Disallow print/debug statements like `console.log`, `alert`, etc                                                                                                                                       | -                                                                               | yes - removes the print statement | `recommended` |
-| no-pause-cypress                  | Disallow using `cy.pause()` in Cypress tests.                                                                                                                                                          | -                                                                               | no                                | `cypress`     |
-| no-unnecessary-waiting-cypress    | Disallow unnecessary waiting with numeric values in Cypress tests.                                                                                                                                     | -                                                                               | no                                | `cypress`     |
-| one-assert-per-test-cypress       | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                                | `cypress`     |
-| no-unnecessary-waiting-playwright | Disallow unnecessary waiting in Playwright tests.                                                                                                                                                      | -                                                                               | no                                | `playwright`  |
-| one-assert-per-test-playwright    | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                                | `playwright`  |
+| Rule Name                         | Description                                                                                                                                                                                            | Configuration                                                                   | Fixable by code                  | Included in   |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | -------------------------------- | ------------- |
+| max-function-size                 | Enforce a maximum function size of 15 lines by default.                                                                                                                                                | A numeric value can be passed to customize the maximum number of allowed lines. | no                               | `recommended` |
+| no-force                          | Disallow using `force: true` with action commands.                                                                                                                                                     | -                                                                               | yes - removes the force argument | `recommended` |
+| no-print                          | Disallow print/debug statements like `console.log`, `alert`, etc.                                                                                                                                      | -                                                                               | yes- removes the print statement | `recommended` |
+| no-control-flow-in-assert         | Disallow using control flow statements inside assert blocks                                                                                                                                            | -                                                                               | no                               | `recommended` |
+| no-pause-cypress                  | Disallow using `cy.pause()` in Cypress tests.                                                                                                                                                          | -                                                                               | no                               | `cypress`     |
+| no-unnecessary-waiting-cypress    | Disallow unnecessary waiting with numeric values in Cypress tests.                                                                                                                                     | -                                                                               | no                               | `cypress`     |
+| one-assert-per-test-cypress       | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                               | `cypress`     |
+| no-unnecessary-waiting-playwright | Disallow unnecessary waiting in Playwright tests.                                                                                                                                                      | -                                                                               | no                               | `playwright`  |
+| one-assert-per-test-playwright    | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                               | `playwright`  |

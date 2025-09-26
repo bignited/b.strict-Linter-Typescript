@@ -1,4 +1,4 @@
-import { TSESLint, TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESLint, TSESTree } from "@typescript-eslint/utils";
 
 /**
  * Fixes no-force rule by removing the { force: true } argument from the action method.
@@ -12,14 +12,17 @@ export function fixNoForce(
   const args = node.arguments;
 
   for (const arg of args) {
-    if (arg.type === "ObjectExpression" && arg.properties.length === 1) {
+    if (
+      arg.type === AST_NODE_TYPES.ObjectExpression &&
+      arg.properties.length === 1
+    ) {
       const prop = arg.properties[0];
 
       if (
-        prop.type === "Property" &&
-        prop.key.type === "Identifier" &&
+        prop.type === AST_NODE_TYPES.Property &&
+        prop.key.type === AST_NODE_TYPES.Identifier &&
         prop.key.name === "force" &&
-        prop.value.type === "Literal" &&
+        prop.value.type === AST_NODE_TYPES.Literal &&
         prop.value.value === true
       ) {
         const nextToken = sourceCode.getTokenAfter(arg);

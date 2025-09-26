@@ -1,4 +1,9 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 import { fixPrintStatement } from "../fixers/no-print.js";
@@ -19,10 +24,10 @@ function reportIfConsoleCall(
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
   if (
-    node.callee.type === "MemberExpression" &&
-    node.callee.object.type === "Identifier" &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
+    node.callee.object.type === AST_NODE_TYPES.Identifier &&
     node.callee.object.name === "console" &&
-    node.callee.property.type === "Identifier" &&
+    node.callee.property.type === AST_NODE_TYPES.Identifier &&
     prohibitedConsoleMethods.has(node.callee.property.name) &&
     !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
@@ -47,7 +52,7 @@ function reportIfAlertCall(
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
   if (
-    node.callee.type === "Identifier" &&
+    node.callee.type === AST_NODE_TYPES.Identifier &&
     node.callee.name === "alert" &&
     !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
@@ -70,10 +75,10 @@ function reportIfDocumentWriteCall(
   context: TSESLint.RuleContext<"noPrint", []>
 ) {
   if (
-    node.callee.type === "MemberExpression" &&
-    node.callee.object.type === "Identifier" &&
+    node.callee.type === AST_NODE_TYPES.MemberExpression &&
+    node.callee.object.type === AST_NODE_TYPES.Identifier &&
     node.callee.object.name === "document" &&
-    node.callee.property.type === "Identifier" &&
+    node.callee.property.type === AST_NODE_TYPES.Identifier &&
     node.callee.property.name === "write" &&
     !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {

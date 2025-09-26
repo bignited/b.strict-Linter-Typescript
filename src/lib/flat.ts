@@ -10,6 +10,7 @@ import noUnnecessaryWaitingPlaywright from "./rules/no-unnecessary-waiting-playw
 import noPrint from "./rules/no-print.js";
 import oneAssertPerTestCypress from "./rules/one-assert-per-test-cypress.js";
 import oneAssertPerTestPlaywright from "./rules/one-assert-per-test-playwright.js";
+import noControlFlowInAssert from "./rules/no-control-flow-in-assert.js";
 
 /**
  * @fileoverview ESLint plugin with b.strict rules.
@@ -35,6 +36,7 @@ const baseRules = {
   "bstrict/max-function-size": ["warn", 15],
   "bstrict/no-force": "warn",
   "bstrict/no-print": "warn",
+  "bstrict/no-control-flow-in-assert": "warn",
 };
 
 const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
@@ -46,6 +48,7 @@ const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "no-print": noPrint,
   "one-assert-per-test-cypress": oneAssertPerTestCypress,
   "one-assert-per-test-playwright": oneAssertPerTestPlaywright,
+  "no-control-flow-in-assert": noControlFlowInAssert,
 };
 
 const commonGlobals: Record<string, boolean> = {
@@ -58,8 +61,7 @@ const commonGlobals: Record<string, boolean> = {
   ...globals.mocha,
 };
 
-const recommended = {
-  name: "bstrict/recommended",
+const basePluginsAndLanguageOptions = {
   plugins: {
     bstrict: { rules },
     "@stylistic": stylistic,
@@ -67,18 +69,17 @@ const recommended = {
   languageOptions: {
     globals: commonGlobals,
   },
+};
+
+const recommended = {
+  name: "bstrict/recommended",
+  ...basePluginsAndLanguageOptions,
   rules: baseRules,
 };
 
 const cypress = {
   name: "bstrict/cypress",
-  plugins: {
-    bstrict: { rules },
-    "@stylistic": stylistic,
-  },
-  languageOptions: {
-    globals: commonGlobals,
-  },
+  ...basePluginsAndLanguageOptions,
   rules: {
     ...baseRules,
     "bstrict/no-unnecessary-waiting-cypress": "warn",
@@ -89,13 +90,7 @@ const cypress = {
 
 const playwright = {
   name: "bstrict/playwright",
-  plugins: {
-    bstrict: { rules },
-    "@stylistic": stylistic,
-  },
-  languageOptions: {
-    globals: commonGlobals,
-  },
+  ...basePluginsAndLanguageOptions,
   rules: {
     ...baseRules,
     "bstrict/no-unnecessary-waiting-playwright": "warn",

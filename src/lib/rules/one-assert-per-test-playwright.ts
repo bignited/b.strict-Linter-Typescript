@@ -1,19 +1,28 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node.js";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 
 /**
  * Determines whether the given call expression is a Playwright assertion, such as `expect()`.
  */
 function isPlaywrightAssertion(node: TSESTree.CallExpression): boolean {
-  return node.callee.type === "Identifier" && node.callee.name === "expect";
+  return (
+    node.callee.type === AST_NODE_TYPES.Identifier &&
+    node.callee.name === "expect"
+  );
 }
 
 /**
  * Determines whether the given callee node represents a Playwright test declaration, such as `test()`.
  */
 function isPlaywrightTestCall(callee: TSESTree.Node): boolean {
-  return callee.type === "Identifier" && callee.name === "test";
+  return callee.type === AST_NODE_TYPES.Identifier && callee.name === "test";
 }
 
 /**
@@ -26,12 +35,15 @@ function reportIfMoreThanOneAssertion(
   if (
     isPlaywrightTestCall(node.callee) &&
     node.arguments.length > 1 &&
-    node.arguments[1].type === "ArrowFunctionExpression" &&
-    node.arguments[1].body.type === "BlockStatement"
+    node.arguments[1].type === AST_NODE_TYPES.ArrowFunctionExpression &&
+    node.arguments[1].body.type === AST_NODE_TYPES.BlockStatement
   ) {
     const block = node.arguments[1].body;
     const assertionCount = countAssertions(block, isPlaywrightAssertion);
-    if (assertionCount > 1) {
+    if (
+      assertionCount > 1 &&
+      !nodeHasFullLineCommentAbove<"oneAssertPerTestPlaywright">(node, context)
+    ) {
       context.report({
         node,
         messageId: "oneAssertPerTestPlaywright",

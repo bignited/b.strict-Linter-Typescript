@@ -1,6 +1,14 @@
-import { ESLintUtils, TSESLint, TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint,
+  TSESTree,
+} from "@typescript-eslint/utils";
 import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers.js";
+import {
+  getFullCommentLineNumbers,
+  nodeHasFullLineCommentAbove,
+} from "../comment-support/line-numbers.js";
 
 /**
  * @fileoverview A rule to enforce a maximum function size of 15 lines.
@@ -31,11 +39,14 @@ function isEmbedded(node: FunctionNodes): boolean {
     return false;
   }
 
-  if (parent.type === "MethodDefinition" && parent.value === node) {
+  if (
+    parent.type === AST_NODE_TYPES.MethodDefinition &&
+    parent.value === node
+  ) {
     return false;
   }
 
-  if (parent.type === "Property" && parent.value === node) {
+  if (parent.type === AST_NODE_TYPES.Property && parent.value === node) {
     return (
       parent.method === true || parent.kind === "get" || parent.kind === "set"
     );
@@ -48,7 +59,10 @@ function isEmbedded(node: FunctionNodes): boolean {
  * Identifies if a node is a FunctionExpression which is part of an IIFE
  */
 function isIIFE(node: FunctionNodes): boolean {
-  return node.parent?.type === "CallExpression" && node.parent.callee === node;
+  return (
+    node.parent?.type === AST_NODE_TYPES.CallExpression &&
+    node.parent.callee === node
+  );
 }
 
 /**
@@ -95,15 +109,18 @@ function reportIfFunctionSizeExceedsLines(
   const node = isEmbedded(funcNode) ? funcNode.parent : funcNode;
 
   if (
-    node.type === "FunctionExpression" ||
-    node.type === "ArrowFunctionExpression"
+    node.type === AST_NODE_TYPES.FunctionExpression ||
+    node.type === AST_NODE_TYPES.ArrowFunctionExpression
   ) {
     if (isIIFE(node)) return;
   }
 
   const lineCount = validateLines(node, lines, commentLineNumbers) - 1;
 
-  if (lineCount >= maxLines) {
+  if (
+    lineCount >= maxLines &&
+    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context)
+  ) {
     context.report({
       node,
       messageId: "maxFunctionSize",
