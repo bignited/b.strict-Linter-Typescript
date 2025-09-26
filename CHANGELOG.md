@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.6...v4.2.0) (2025-09-26)
+
+
+### Features
+
+* New Rule: No control flows in assert. ([82db300](https://github.com/bignited/b.strict-Linter-Javascript/commit/82db300f67a9f7497a68cd36566a7541a5faf9be))
+
 ## [4.1.6](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.1.5...v4.1.6) (2025-09-23)
 
 
