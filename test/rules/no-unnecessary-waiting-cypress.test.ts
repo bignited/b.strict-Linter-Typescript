@@ -1,5 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/no-unnecessary-waiting-cypress.js";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for no-unnecessary-waiting-cypress.ts rule.
@@ -7,9 +8,6 @@ import rule from "../../dist/lib/rules/no-unnecessary-waiting-cypress.js";
  */
 
 const ruleTester = new RuleTester();
-const errors: [{ messageId: "noUnnecessaryWaitingCypress" }] = [
-  { messageId: "noUnnecessaryWaitingCypress" },
-];
 
 ruleTester.run("no-unnecessary-waiting-cypress", rule, {
   valid: [
@@ -68,61 +66,61 @@ ruleTester.run("no-unnecessary-waiting-cypress", rule, {
     // Test that wait has an error when arbitrary number is passed
     {
       code: "cy.wait(0)",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait has an error when arbitrary number is passed
     {
       code: "cy.wait(100)",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait has an error when arbitrary number is passed
     {
       code: "cy.wait(5000)",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait has an error when arbitrary number is through a variable
     {
       code: "const someNumber=500; cy.wait(someNumber)",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait has an error when arbitrary number is through a variable from a function
     {
       code: "function customWait (ms = 1) { cy.wait(ms) }",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait has an error when arbitrary number is through a variable from an arrowfunction
     {
       code: "const customWait = (ms = 1) => { cy.wait(ms) }",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait with arbitrary number has an error when chained from get
     {
       code: 'cy.get(".some-element").wait(10)',
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait with arbitrary number has an error when chained
     {
       code: 'cy.get(".some-element").contains("foo").wait(10)',
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     // Test that wait with arbitrary number has an error when chained from arrowfunction
     {
       code: 'const customWait = (ms = 1) => { cy.get(".some-element").wait(ms) }',
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
 
     //Test wait has an error when the line above is not a full line comment
     {
       code: "cy.visit(b.ignited) //this is a comment\n cy.wait(10)",
-      errors,
+      errors: err("noUnnecessaryWaitingCypress"),
     },
   ],
 });

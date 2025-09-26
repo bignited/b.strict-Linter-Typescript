@@ -1,5 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/no-print.js";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for no-print.ts rule.
@@ -45,37 +46,37 @@ ruleTester.run("no-print", rule, {
     {
       code: "console.log();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "console.log" } }],
+      errors: err("noPrint", 1, { data: { name: "console.log" } }),
     },
     // Test that console.info() gives error
     {
       code: "console.info();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "console.info" } }],
+      errors: err("noPrint", 1, { data: { name: "console.info" } }),
     },
     // Test that console.warn() gives error
     {
       code: "console.warn();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "console.warn" } }],
+      errors: err("noPrint", 1, { data: { name: "console.warn" } }),
     },
     // Test that console.error() gives error
     {
       code: "console.error();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "console.error" } }],
+      errors: err("noPrint", 1, { data: { name: "console.error" } }),
     },
     // Test that alert() gives error
     {
       code: "alert();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "alert" } }],
+      errors: err("noPrint", 1, { data: { name: "alert" } }),
     },
     // Test that document.write() gives error
     {
       code: "document.write();",
       output: "",
-      errors: [{ messageId: "noPrint", data: { name: "document.write" } }],
+      errors: err("noPrint", 1, { data: { name: "document.write" } }),
     },
   ],
 });

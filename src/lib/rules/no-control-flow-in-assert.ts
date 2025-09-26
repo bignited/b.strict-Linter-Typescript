@@ -13,6 +13,9 @@ const CONTROL_FLOW_TYPES = new Set([
   AST_NODE_TYPES.SwitchCase,
 ]);
 
+/**
+ * Determines whether a given call expression is an assertion callback (e.g., `expect(fn)` or `something.should(fn)` in Cypress)
+ */
 function isAssertionCallbackCall(node: TSESTree.CallExpression): boolean {
   const [firstArg] = node.arguments;
 
@@ -40,6 +43,10 @@ function isAssertionCallbackCall(node: TSESTree.CallExpression): boolean {
 
   return false;
 }
+
+/**
+ * Recursively traverses an AST node and its children, reporting any control flow statements (like loops or conditionals) found within assertion callbacks
+ */
 
 function walkAndReportControlFlow(
   node: TSESTree.Node,
@@ -75,6 +82,9 @@ function walkAndReportControlFlow(
   }
 }
 
+/**
+ * Checks if a call expression is an assertion callback and, if so, reports any control flow statements inside its callback body
+ */
 function reportIfControlFlowInAssert(
   node: TSESTree.CallExpression,
   context: TSESLint.RuleContext<"noControlFlowInAssert", []>

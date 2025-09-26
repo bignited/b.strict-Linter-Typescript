@@ -1,5 +1,8 @@
 import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 
+/**
+ * Type guard to check whether a value is a TSESTree AST node
+ */
 export function isNode(value: unknown): value is TSESTree.Node {
   return (
     typeof value === "object" &&
@@ -9,10 +12,16 @@ export function isNode(value: unknown): value is TSESTree.Node {
   );
 }
 
+/**
+ * Type guard to check whether a value is an array of AST Nodes
+ */
 function isNodeArray(value: unknown): value is TSESTree.Node[] {
   return Array.isArray(value) && value.every(isNode);
 }
 
+/**
+ * Recursively traverses an AST node and its children, counting call expressions that satisfy the given assertion check
+ */
 function checkNode(
   node: TSESTree.Node,
   isAssertion: (node: TSESTree.CallExpression) => boolean,
@@ -50,6 +59,9 @@ function checkNode(
   }
 }
 
+/**
+ * Counts the number of assertion call expressions within a given block statement
+ */
 export function countAssertions(
   block: TSESTree.BlockStatement,
   isAssertion: (node: TSESTree.CallExpression) => boolean

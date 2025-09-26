@@ -1,5 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/no-pause-cypress.js";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for no-pause.ts rule.
@@ -7,9 +8,6 @@ import rule from "../../dist/lib/rules/no-pause-cypress.js";
  */
 
 const ruleTester = new RuleTester();
-const errors: [{ messageId: "noPauseCypress" }] = [
-  { messageId: "noPauseCypress" },
-];
 
 ruleTester.run("no-pause-cypress", rule, {
   valid: [
@@ -38,31 +36,31 @@ ruleTester.run("no-pause-cypress", rule, {
     // Test that cy.pause() function is called
     {
       code: "cy.pause()",
-      errors,
+      errors: err("noPauseCypress"),
     },
 
     // Test that cy.pause() function is called with options
     {
       code: "cy.pause({ log: false })",
-      errors,
+      errors: err("noPauseCypress"),
     },
 
     // Test that pause() function is called after another call function
     {
       code: "cy.get('button').pause()",
-      errors,
+      errors: err("noPauseCypress"),
     },
 
     // Test that pause() function is called before another function
     {
       code: "cy.pause().getCookie('app')",
-      errors,
+      errors: err("noPauseCypress"),
     },
 
     // Test that pause() function is called complex call function
     {
       code: "cy.get('button').should('have.attr', 'value').and('match', submit).pause()",
-      errors,
+      errors: err("noPauseCypress"),
     },
   ],
 });

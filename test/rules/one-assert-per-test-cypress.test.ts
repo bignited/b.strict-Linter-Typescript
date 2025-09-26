@@ -1,5 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/one-assert-per-test-cypress.js";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for one-assert-per-test-cypress.ts rule.
@@ -54,7 +55,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
         expect(false).to.be.false;
       });
       `,
-      errors: [{ messageId: "oneAssertPerTestCypress" }],
+      errors: err("oneAssertPerTestCypress"),
     },
     // Test that a combination of expect and assert is not allowed
     {
@@ -64,7 +65,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
         cy.get('button').should('be.visible');
       });
       `,
-      errors: [{ messageId: "oneAssertPerTestCypress" }],
+      errors: err("oneAssertPerTestCypress"),
     },
     // Test that multiple nested assertions is not allowed
     {
@@ -76,7 +77,7 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
         }
       });
       `,
-      errors: [{ messageId: "oneAssertPerTestCypress" }],
+      errors: err("oneAssertPerTestCypress"),
     },
   ],
 });

@@ -1,5 +1,6 @@
 import rule from "../../dist/lib/rules/no-control-flow-in-assert.js";
 import { RuleTester } from "@typescript-eslint/rule-tester";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for no-control-flow-in-assert.ts rule.
@@ -30,6 +31,10 @@ ruleTester.run("no-control-flow-in-assert", rule, {
         }
       `,
     },
+    // Test inline arrow callback without block
+    {
+      code: `cy.get('button').should($btn => expect($btn).to.exist);`,
+    },
   ],
   invalid: [
     // Test if inside expect callback
@@ -41,17 +46,35 @@ ruleTester.run("no-control-flow-in-assert", rule, {
           }
         }).toThrow();
       `,
-      errors: [{ messageId: "noControlFlowInAssert" }],
+      errors: err("noControlFlowInAssert"),
     },
-    // Test return inside expect callback
+    // Test if/else inside expect callback
     {
       code: `
         expect(() => {
-          if (!value) return;
-          doSomething();
-        }).not.toThrow();
+          if (x === 1) {
+            foo();
+          } else if (x === 2) {
+            bar();
+          }
+        }).toThrow();
       `,
-      errors: [{ messageId: "noControlFlowInAssert" }],
+      errors: err("noControlFlowInAssert", 2),
+    },
+    // Test switch inside expect callback
+    {
+      code: `
+        expect(() => {
+          switch (value) {
+            case 1:
+              foo();
+              break;
+            default:
+              bar();
+          }
+        }).toThrow();
+      `,
+      errors: err("noControlFlowInAssert", 2),
     },
     // Test Cypress: if inside cy.should callback
     {
@@ -62,7 +85,37 @@ ruleTester.run("no-control-flow-in-assert", rule, {
           }
         });
       `,
-      errors: [{ messageId: "noControlFlowInAssert" }],
+      errors: err("noControlFlowInAssert"),
+    },
+    // Test Cypress: switch inside cy.should callback
+    {
+      code: `
+        cy.get('button').should(($btn) => {
+          switch ($btn.text()) {
+            case 'OK':
+              expect($btn).to.be.visible;
+              break;
+            case 'Cancel':
+              expect($btn).to.not.exist;
+              break;
+          }
+        });
+      `,
+      errors: err("noControlFlowInAssert", 2),
+    },
+    // Test nested if inside expect callback
+    {
+      code: `
+        expect(() => {
+          function inner() {
+            if (true) {
+              throw new Error('nested fail');
+            }
+          }
+          inner();
+        }).toThrow();
+      `,
+      errors: err("noControlFlowInAssert"),
     },
   ],
 });

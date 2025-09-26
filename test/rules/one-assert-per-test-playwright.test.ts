@@ -1,5 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/one-assert-per-test-playwright.js";
+import { err } from "../../dist/lib/utils/errors.js";
 
 /**
  * @fileoverview Tests for one-assert-per-test-playwright.ts rule.
@@ -46,7 +47,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
         expect(false).toBe(false);
       });
       `,
-      errors: [{ messageId: "oneAssertPerTestPlaywright" }],
+      errors: err("oneAssertPerTestPlaywright"),
     },
     // Test that multiple nestes expects is not allowed
     {
@@ -58,7 +59,7 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
         }
       });
       `,
-      errors: [{ messageId: "oneAssertPerTestPlaywright" }],
+      errors: err("oneAssertPerTestPlaywright"),
     },
   ],
 });
