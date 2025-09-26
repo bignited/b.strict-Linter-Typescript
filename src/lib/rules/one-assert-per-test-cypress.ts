@@ -6,6 +6,7 @@ import {
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node.js";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 
 /**
  * Determines whether the given call expression is a Cypress assertion, such as `expect()` or `should()`.
@@ -48,7 +49,10 @@ function reportIfMoreThanOneAssertion(
   ) {
     const block = node.arguments[1].body;
     const assertionCount = countAssertions(block, isCypressAssertion);
-    if (assertionCount > 1) {
+    if (
+      assertionCount > 1 &&
+      !nodeHasFullLineCommentAbove<"oneAssertPerTestCypress">(node, context)
+    ) {
       context.report({
         node,
         messageId: "oneAssertPerTestCypress",

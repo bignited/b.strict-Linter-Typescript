@@ -5,7 +5,10 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
-import { getFullCommentLineNumbers } from "../comment-support/line-numbers.js";
+import {
+  getFullCommentLineNumbers,
+  nodeHasFullLineCommentAbove,
+} from "../comment-support/line-numbers.js";
 
 /**
  * @fileoverview A rule to enforce a maximum function size of 15 lines.
@@ -114,7 +117,10 @@ function reportIfFunctionSizeExceedsLines(
 
   const lineCount = validateLines(node, lines, commentLineNumbers) - 1;
 
-  if (lineCount >= maxLines) {
+  if (
+    lineCount >= maxLines &&
+    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context)
+  ) {
     context.report({
       node,
       messageId: "maxFunctionSize",

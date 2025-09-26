@@ -7,6 +7,7 @@ import {
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { isCypressCallChained } from "../cypress-support/called-by-cypress";
 import { isNode } from "../utils/check-node";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
 
 const CONTROL_FLOW_TYPES = new Set([
   AST_NODE_TYPES.IfStatement,
@@ -47,18 +48,18 @@ function isAssertionCallbackCall(node: TSESTree.CallExpression): boolean {
 /**
  * Recursively traverses an AST node and its children, reporting any control flow statements (like loops or conditionals) found within assertion callbacks
  */
-
 function walkAndReportControlFlow(
   node: TSESTree.Node,
   context: TSESLint.RuleContext<"noControlFlowInAssert", []>,
   visited = new Set<TSESTree.Node>()
 ): void {
-  if (visited.has(node)) {
-    return;
-  }
+  if (visited.has(node)) return;
   visited.add(node);
 
-  if (CONTROL_FLOW_TYPES.has(node.type)) {
+  if (
+    CONTROL_FLOW_TYPES.has(node.type) &&
+    !nodeHasFullLineCommentAbove<"noControlFlowInAssert">(node, context)
+  ) {
     context.report({
       node,
       messageId: "noControlFlowInAssert",
@@ -72,13 +73,9 @@ function walkAndReportControlFlow(
 
     if (Array.isArray(value)) {
       for (const item of value) {
-        if (isNode(item)) {
-          walkAndReportControlFlow(item, context, visited);
-        }
+        if (isNode(item)) walkAndReportControlFlow(item, context, visited);
       }
-    } else if (isNode(value)) {
-      walkAndReportControlFlow(value, context, visited);
-    }
+    } else if (isNode(value)) walkAndReportControlFlow(value, context, visited);
   }
 }
 

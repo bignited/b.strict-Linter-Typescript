@@ -35,6 +35,17 @@ ruleTester.run("no-control-flow-in-assert", rule, {
     {
       code: `cy.get('button').should($btn => expect($btn).to.exist);`,
     },
+    // Test that a comment on top the of the control flow statement gives no error
+    {
+      code: `
+        expect(() => {
+          // This is a comment
+          if (value === 1) {
+            throw new Error('fail');
+          }
+        }).toThrow();
+      `,
+    },
   ],
   invalid: [
     // Test if inside expect callback

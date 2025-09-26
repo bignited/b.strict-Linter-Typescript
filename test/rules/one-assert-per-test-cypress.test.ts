@@ -35,13 +35,23 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       });
       `,
     },
-    // Tes that a nested assert is allowed
+    // Test that a nested assert is allowed
     {
       code: `
       it('nested single assertion', () => {
         if (true) {
           expect(true).to.be.true;
         }
+      });
+      `,
+    },
+    // Test that a test with 2 expects gives no error when it has a full line comment above it
+    {
+      code: `
+      // This is a comment
+      it('two expects', () => {
+        expect(true).to.be.true;
+        expect(false).to.be.false;
       });
       `,
     },

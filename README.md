@@ -72,9 +72,10 @@ import stylistic from "@stylistic/eslint-plugin";
 
 export default [
   {
+    files: ["**/*.ts"],
     plugins: {
       bstrict: pluginBstrict,
-      "@stylistic":
+      "@stylistic": stylistic,
     },
     rules: {
       "bstrict/max-function-size": ["warn", 15],
@@ -89,6 +90,7 @@ We also provide a recommended and tool-specific configuration so you can forego 
 ```js
 export default [
   {
+    files: ["**/*.ts"],
     plugins: {
       bstrict: bstrict,
       "@stylistic": stylistic,
@@ -116,6 +118,13 @@ function foo() {
   ...
 }
 /* eslint-enable bstrict/max-function-size */
+```
+
+It is also possible to ignore the rules by placing a full-line comment right above them. The plugin will treat that as an explanation to the piece of code:
+
+```js
+// A force here is necessary because X.
+cy.get("selector").click({ force: true });
 ```
 
 For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/rules) documentation.

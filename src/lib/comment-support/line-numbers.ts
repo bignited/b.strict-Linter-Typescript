@@ -26,19 +26,21 @@ export function getFullCommentLineNumbers(
 }
 
 /**
- * Returns if the node has a full line comment above.
+ * Returns true if there is a single-line comment (`// ...`) immediately above the node,
+ * and that line contains no other code.
  */
-export function nodeHasFullLineCommentAbove<T extends string>(
-  node: TSESTree.Node,
-  context: TSESLint.RuleContext<T, []>
-): boolean {
+export function nodeHasFullLineCommentAbove<
+  T extends string,
+  O extends readonly unknown[] = []
+>(node: TSESTree.Node, context: TSESLint.RuleContext<T, O>): boolean {
   const sourceCode = context.sourceCode;
-  const comments = getFullCommentLineNumbers(
-    sourceCode.getAllComments(),
-    sourceCode
-  );
 
-  return comments.has(node.loc.start.line - 1);
+  const lineNumber = node.loc.start.line - 1;
+  if (lineNumber < 1) return false;
+
+  const lineText = sourceCode.lines[lineNumber - 1].trim();
+
+  return lineText.startsWith("//");
 }
 
 /**

@@ -29,15 +29,15 @@ ruleTester.run("no-print", rule, {
     },
     // Test console log works when line above is a full line comment
     {
-      code: "// This is a commenr \n console.log()",
+      code: "// This is a comment \n console.log()",
     },
     // Test alert works when line above is a full line comment
     {
-      code: "// This is a commenr \n alert()",
+      code: "// This is a comment \n alert()",
     },
     // Test document write works when line above is a full line comment
     {
-      code: "// This is a commenr \n document.write()",
+      code: "// This is a comment \n document.write()",
     },
   ],
 

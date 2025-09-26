@@ -25,6 +25,11 @@ ruleTester.run("max-function-size", rule, {
     {
       code: `function name() {\n${"// test\n".repeat(15)}}`,
     },
+
+    // Test that a function with more than 15 lines passes if it has a full line comment
+    {
+      code: `// this is a comment\n function name() {\n${"test\n".repeat(15)}}`,
+    },
   ],
   invalid: [
     // Test that a function with 15 lines fails

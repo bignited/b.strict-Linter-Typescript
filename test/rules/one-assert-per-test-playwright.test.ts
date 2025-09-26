@@ -37,6 +37,16 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       });
       `,
     },
+    // Test that a test with 2 expects gives no error when it has a full line comment above it
+    {
+      code: `
+      // This is a comment
+      test('two expects', () => {
+        expect(true).toBe(true);
+        expect(false).toBe(false);
+      });
+      `,
+    },
   ],
   invalid: [
     // Test that multiple expects is not allowed
