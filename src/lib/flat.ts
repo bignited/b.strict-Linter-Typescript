@@ -11,6 +11,7 @@ import noPrint from "./rules/no-print.js";
 import oneAssertPerTestCypress from "./rules/one-assert-per-test-cypress.js";
 import oneAssertPerTestPlaywright from "./rules/one-assert-per-test-playwright.js";
 import noControlFlowInAssert from "./rules/no-control-flow-in-assert.js";
+import noChainedTraversal from "./rules/no-chained-traversal.js";
 
 /**
  * @fileoverview ESLint plugin with b.strict rules.
@@ -37,6 +38,7 @@ const baseRules = {
   "bstrict/no-force": "warn",
   "bstrict/no-print": "warn",
   "bstrict/no-control-flow-in-assert": "warn",
+  "bstrict/no-chained-traversal": "warn",
 };
 
 const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
@@ -49,6 +51,7 @@ const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
   "one-assert-per-test-cypress": oneAssertPerTestCypress,
   "one-assert-per-test-playwright": oneAssertPerTestPlaywright,
   "no-control-flow-in-assert": noControlFlowInAssert,
+  "no-chained-traversal": noChainedTraversal,
 };
 
 const commonGlobals: Record<string, boolean> = {
