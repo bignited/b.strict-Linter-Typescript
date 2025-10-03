@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.0](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.2.1...v4.3.0) (2025-10-03)
+
+
+### Features
+
+* new rule: no chained traversal ([#26](https://github.com/bignited/b.strict-Linter-Javascript/issues/26)) ([4c5f98c](https://github.com/bignited/b.strict-Linter-Javascript/commit/4c5f98c0cb34498729da58ed449eb27520293548))
+
 ## [4.2.1](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.2.0...v4.2.1) (2025-10-03)
 
 
