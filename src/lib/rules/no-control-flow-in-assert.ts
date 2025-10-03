@@ -5,9 +5,9 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { isCypressCallChained } from "../cypress-support/called-by-cypress";
-import { isNode } from "../utils/check-node";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers";
+import { isCypressCallChained } from "../cypress-support/called-by-cypress.js";
+import { isNode } from "../utils/check-node.js";
+import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
 
 const CONTROL_FLOW_TYPES = new Set([
   AST_NODE_TYPES.IfStatement,
