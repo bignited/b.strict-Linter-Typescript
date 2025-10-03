@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-bstrict",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "type": "module",
   "description": "ESLint plugin for bstrict.",
   "exports": {
@@ -29,8 +29,7 @@
   "author": "b.ignited",
   "license": "ISC",
   "peerDependencies": {
-    "eslint": "^9.0.0",
-    "@stylistic/eslint-plugin": "^5.4.0"
+    "eslint": "^9.0.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.4.0",
@@ -47,6 +46,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@stylistic/eslint-plugin": "^5.4.0",
     "@typescript-eslint/utils": "^8.37.0",
     "globals": "^15.13.0"
   }
