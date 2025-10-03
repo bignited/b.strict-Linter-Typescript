@@ -6,19 +6,24 @@ An [ESLint](https://eslint.org) plugin for [b.ignited](https://bignited.be).
 
 1. [Requirements](#requirements)
 2. [Installation](#installation)
-3. [Usage](#usage)
+3. [Quickstart](#quickstart)
+4. [Advanced Usage](#advanced-usage)
+
+- [Select specific rules only](#select-specific-rules-only)
+- [Override rules](#override-rules)
+
+5. [Disable Rules](#disable-rules)
+6. [Rules](#rules)
 
 ## Requirements
 
-[ESLint](https://www.npmjs.com/package/eslint) `v9`. Lower versions are no longer supported
-This plugin supports the use of [Flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) with ESLint `9.0.0` and above.
+- [ESLint](https://www.npmjs.com/package/eslint) `v9` or higher  
+  This plugin supports **Flat Config files** (`eslint.config.*js`) introduced in ESLint 9+.
 
-[Stylistic](https://www.npmjs.com/package/@stylistic/eslint-plugin)
-Required since some rules within the recommended come from this package. version `5.4.0` and above.
+- [Stylistic](https://www.npmjs.com/package/@stylistic/eslint-plugin) `v5.4.0` or higher
+  This plugin uses `@stylistic/eslint-plugin` rules on top of our own custom rules.
 
 ## Installation
-
-Easy to use with npm or yarn using following commands:
 
 ```sh
 npm install --save-dev eslint-plugin-bstrict
@@ -30,74 +35,98 @@ or
 yarn add --dev eslint-plugin-bstrict
 ```
 
-## Usage
+## Quickstart
 
-ESLint `v9` and above uses a [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files) format with filename `eslint.config.*js` by default. Please refer to [Flat config](#eslint-v9-or-above).
+This plugin ships with ready-to-use flat config presets so you can get started immediately.
 
-**_Important_**: Merging _languageOptions_
-ESLint Flat Config does not deep-merge configuration objects. If you add custom parser options, make sure to merge the plugin's _languageOptions.globals_ manually, or they will be overwritten.
+**Note:** If its the first time using eslint (or dont have an eslint.config.\*js file already) run:
 
-```js
-import pluginBstrict from "eslint-plugin-bstrict";
-import parser from "@typescript-eslint/parser";
-import stylistic from "@stylistic/eslint-plugin";
-
-export default [
-  {
-    files: ["**/*.ts"],
-    languageOptions: {
-      parser: parser,
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: "module",
-      },
-      globals: {
-        ...pluginBstrict.configs.recommended.languageOptions?.globals,
-      },
-    },
-    plugins: {
-      pluginBstrict: pluginBstrict,
-      "@stylistic": stylistic,
-    },
-    rules: pluginBstrict.configs.playwright.rules,
-  },
-];
+```sh
+npx eslint --init
 ```
 
-It is also possible to define individual rules:
+Now you can just import `bstrict` and `stylistic` into `eslint.config.mjs` Make sure to add them as `plugins` + add the desired preset / rules to the `rules`
+
+More info on available presets / rules [here](#rules)
 
 ```js
-import pluginBstrict from "eslint-plugin-bstrict";
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
+import bstrict from "eslint-plugin-bstrict";
 import stylistic from "@stylistic/eslint-plugin";
 
-export default [
+export default defineConfig([
   {
-    files: ["**/*.ts"],
-    plugins: {
-      bstrict: pluginBstrict,
-      "@stylistic": stylistic,
-    },
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser },
     rules: {
-      "bstrict/max-function-size": ["warn", 15],
-      "bstrict/no-unnecessary-waiting-cypress": "error",
+      ...bstrict.configs.recommended.rules,
     },
   },
-];
+  tseslint.configs.recommended,
+]);
 ```
 
-We also provide a recommended and tool-specific configuration so you can forego configuring _plugins_, _rules_ individually. See [recommended rules](#rules) for which rules are included.
+## Advanced Usage
+
+If you need fine-grained control:
+
+### Select specific rules only
+
+When you dont need a preset but just a particular set of rules:
 
 ```js
-export default [
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
+import bstrict from "eslint-plugin-bstrict";
+import stylistic from "@stylistic/eslint-plugin";
+
+export default defineConfig([
   {
-    files: ["**/*.ts"],
-    plugins: {
-      bstrict: bstrict,
-      "@stylistic": stylistic,
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser },
+    rules: {
+      "bstrict/max-function-size": ["warn", 20],
+      "bstrict/no-print": ["warn"],
     },
-    rules: bstrict.configs.playwright.rules,
   },
-];
+  tseslint.configs.recommended,
+]);
+```
+
+### Override rules
+
+If you need to override a rule within a preset:
+
+```js
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
+import bstrict from "eslint-plugin-bstrict";
+import stylistic from "@stylistic/eslint-plugin";
+
+export default defineConfig([
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser },
+    rules: {
+      ...bstrict.configs.recommended.rules,
+      "@stylistic/indent": "off",
+    },
+  },
+  tseslint.configs.recommended,
+]);
 ```
 
 ## Disable rules
