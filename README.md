@@ -8,12 +8,11 @@ An [ESLint](https://eslint.org) plugin for [b.ignited](https://bignited.be).
 2. [Installation](#installation)
 3. [Quickstart](#quickstart)
 4. [Advanced Usage](#advanced-usage)
-
-- [Select specific rules only](#select-specific-rules-only)
-- [Override rules](#override-rules)
-
+   1. [Select specific rules only](#select-specific-rules-only)
+   2. [Override rules](#override-rules)
 5. [Disable Rules](#disable-rules)
 6. [Rules](#rules)
+7. [Running ESLint](#running-eslint)
 
 ## Requirements
 
@@ -172,8 +171,17 @@ All following rules are within recommended configuration
 | no-force                          | Disallow using `force: true` with action commands.                                                                                                                                                     | -                                                                               | yes - removes the force argument | `recommended` |
 | no-print                          | Disallow print/debug statements like `console.log`, `alert`, etc.                                                                                                                                      | -                                                                               | yes- removes the print statement | `recommended` |
 | no-control-flow-in-assert         | Disallow using control flow statements inside assert blocks                                                                                                                                            | -                                                                               | no                               | `recommended` |
+| no-chained-traversal              | Disalow using 2 or more chained HTML traversals in a single selector                                                                                                                                   | -                                                                               | no                               | `recommended` |
 | no-pause-cypress                  | Disallow using `cy.pause()` in Cypress tests.                                                                                                                                                          | -                                                                               | no                               | `cypress`     |
 | no-unnecessary-waiting-cypress    | Disallow unnecessary waiting with numeric values in Cypress tests.                                                                                                                                     | -                                                                               | no                               | `cypress`     |
 | one-assert-per-test-cypress       | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                               | `cypress`     |
 | no-unnecessary-waiting-playwright | Disallow unnecessary waiting in Playwright tests.                                                                                                                                                      | -                                                                               | no                               | `playwright`  |
 | one-assert-per-test-playwright    | Limits the amount of `direct` asserts within a Cypress test block. **Important:** If asserts are done through indirectly (from a Page Object for example) these will not be counted towards the limit. | -                                                                               | no                               | `playwright`  |
+
+## Running Eslint
+
+Run you linter with
+
+```bash
+npx eslint .
+```

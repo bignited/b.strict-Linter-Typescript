@@ -6,24 +6,21 @@ import {
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 
-const CYPRESS_TRAVERSALS = new Set([
+const TRAVERSAL_TYPES = new Set([
   "find",
   "parent",
   "children",
   "siblings",
   "closest",
-]);
-
-const NATIVE_TRAVERSALS = new Set([
   "parentNode",
   "childNodes",
   "nextSibling",
   "previousSibling",
   "querySelector",
   "querySelectorAll",
+  "locator",
+  "frameLocator",
 ]);
-
-const PLAYWRIGHT_TRAVERSALS = new Set(["locator", "frameLocator"]);
 
 /**
  * Returns true if a MemberExpression property is a known traversal method
@@ -32,11 +29,7 @@ function isTraversalPropertyCheck(node: TSESTree.Node): boolean {
   if (node.type === AST_NODE_TYPES.MemberExpression) {
     const prop = node.property;
     if (prop.type === AST_NODE_TYPES.Identifier) {
-      return (
-        CYPRESS_TRAVERSALS.has(prop.name) ||
-        NATIVE_TRAVERSALS.has(prop.name) ||
-        PLAYWRIGHT_TRAVERSALS.has(prop.name)
-      );
+      return TRAVERSAL_TYPES.has(prop.name);
     }
   }
   return false;
@@ -78,7 +71,9 @@ function countTraversalChain(node: TSESTree.Node | null): number {
 
   return thisNodeCount;
 }
-
+/**
+ * Returns true if the node is the outermost part of a chain (not nested in another call/member)
+ */
 function isTopmostChainNode(node: TSESTree.Node): boolean {
   const parent = (node as any).parent as TSESTree.Node | undefined;
   if (!parent) return true;
