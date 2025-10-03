@@ -13,7 +13,7 @@ import { fixPrintStatement } from "../fixers/no-print.js";
  * @author b.ignited
  */
 
-const prohibitedConsoleMethods = new Set(["log", "info", "warn", "error"]);
+const CONSOLE_METHODS = new Set(["log", "info", "warn", "error"]);
 
 /**
  * Reports if the call expression is a disallowed `console` method
@@ -28,7 +28,7 @@ function reportIfConsoleCall(
     node.callee.object.type === AST_NODE_TYPES.Identifier &&
     node.callee.object.name === "console" &&
     node.callee.property.type === AST_NODE_TYPES.Identifier &&
-    prohibitedConsoleMethods.has(node.callee.property.name) &&
+    CONSOLE_METHODS.has(node.callee.property.name) &&
     !nodeHasFullLineCommentAbove<"noPrint">(node, context)
   ) {
     context.report({
