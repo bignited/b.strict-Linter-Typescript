@@ -1,4 +1,4 @@
-import pkg from "../../package.json" assert { type: "json" };
+import { createRequire } from "module";
 import globals from "globals";
 import { TSESLint } from "@typescript-eslint/utils";
 import stylistic from "@stylistic/eslint-plugin";
@@ -100,6 +100,9 @@ const playwright = {
     "bstrict/one-assert-per-test-playwright": "warn",
   },
 };
+
+const myRequire = createRequire(import.meta.url);
+const pkg = myRequire("../../package.json");
 
 export default {
   name: "bstrict",
