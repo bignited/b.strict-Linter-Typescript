@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.1](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.0...v4.3.1) (2025-10-09)
+
+
+### Bug Fixes
+
+* pkg import ([#28](https://github.com/bignited/b.strict-Linter-Javascript/issues/28)) ([30ffdf8](https://github.com/bignited/b.strict-Linter-Javascript/commit/30ffdf8e23ea6ff66bdc07d34cbb5ab2e21c0131))
+
 ## [4.3.0](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.2.1...v4.3.0) (2025-10-03)
 
 
