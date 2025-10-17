@@ -5,7 +5,7 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { nodeHasFullLineCommentAbove } from "../utils/line-numbers.js";
 import { fixNoForce } from "../fixers/no-force.js";
 
 /**

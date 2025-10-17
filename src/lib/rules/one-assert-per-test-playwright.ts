@@ -6,7 +6,7 @@ import {
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
 import { countAssertions } from "../utils/check-node.js";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { nodeHasFullLineCommentAbove } from "../utils/line-numbers.js";
 
 /**
  * Determines whether the given call expression is a Playwright assertion, such as `expect()`.
