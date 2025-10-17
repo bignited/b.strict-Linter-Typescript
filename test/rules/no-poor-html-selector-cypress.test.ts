@@ -28,37 +28,37 @@ ruleTester.run("no-poor-html-selector-cypress", rule, {
     // Test an overly complex CSS selector with multiple child combinators
     {
       code: "cy.get('.sidebar > .menu > li > a')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
 
     // Test an overly complex XPath selector with too many slashes
     {
       code: "cy.xpath('//div[@id=\"test\"]/a/div')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
 
     // Test a position-based CSS selector using nth-child()
     {
       code: "cy.get('li:nth-child(3)')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
 
     // Test a framework-dependent selector (Bootstrap-style .btn classes)
     {
       code: "cy.get('.btn.btn-primary')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
 
     // Test a potentially auto-generated selector with random alphanumeric
     {
       code: "cy.get('.card-123abc')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
 
     // Test a selector containing multiple traversal combinators
     {
       code: "cy.get('.a > .b + .c ~ .d')",
-      errors: err("noPoorHtmlSelectorCypress"),
+      errors: err("noPoorHtmlSelector"),
     },
   ],
 });
