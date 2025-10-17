@@ -63,7 +63,7 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
     rules: {
-      ...bstrict.configs.recommended.rules,
+      ...bstrict.configs.recommended.rules, // or playwright.rules or cypress.rules
     },
   },
   tseslint.configs.recommended,
