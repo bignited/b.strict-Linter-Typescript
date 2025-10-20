@@ -4,7 +4,7 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
-import { isPoorSelector } from "../utils/selectors";
+import { isPoorSelector } from "../utils/selectors.js";
 
 /**
  * Reports poor or fragile HTML selectors used in test frameworks.
