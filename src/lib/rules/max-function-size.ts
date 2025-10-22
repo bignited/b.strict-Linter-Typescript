@@ -43,9 +43,9 @@ const IGNORE_KEYWORDS = new Set([
 ]);
 
 /**
- * Identifies if a node should be ignored
+ * Identifies if a function callback should be ignored by its name
  */
-function shouldIgnore(node: TSESTree.Node): boolean {
+function shouldIgnoreCallBack(node: FunctionNodes): boolean {
   const parent = node.parent;
 
   if (!parent) return false;
@@ -64,6 +64,31 @@ function shouldIgnore(node: TSESTree.Node): boolean {
     callee.type === AST_NODE_TYPES.MemberExpression &&
     callee.property.type === AST_NODE_TYPES.Identifier &&
     IGNORE_KEYWORDS.has(callee.property.name)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Identifies if a function declaration should be ignored by its name
+ */
+function shouldIgnoreDeclaration(node: FunctionNodes): boolean {
+  if (
+    (node.type === AST_NODE_TYPES.FunctionDeclaration ||
+      node.type === AST_NODE_TYPES.FunctionExpression) &&
+    node.id?.type === AST_NODE_TYPES.Identifier &&
+    IGNORE_KEYWORDS.has(node.id.name)
+  ) {
+    return true;
+  }
+
+  if (
+    node.type === AST_NODE_TYPES.ArrowFunctionExpression &&
+    node.parent.type === AST_NODE_TYPES.VariableDeclarator &&
+    node.parent.id.type === AST_NODE_TYPES.Identifier &&
+    IGNORE_KEYWORDS.has(node.parent.id.name)
   ) {
     return true;
   }
@@ -143,6 +168,9 @@ function reportIfFunctionSizeExceedsLines(
   const sourceCode = context.sourceCode;
   const lines = sourceCode.lines;
 
+  if (shouldIgnoreCallBack(funcNode) || shouldIgnoreDeclaration(funcNode))
+    return;
+
   const commentLineNumbers = getFullCommentLineNumbers(
     sourceCode.getAllComments(),
     sourceCode
@@ -161,8 +189,7 @@ function reportIfFunctionSizeExceedsLines(
 
   if (
     lineCount >= maxLines &&
-    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context) &&
-    !shouldIgnore(funcNode)
+    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context)
   ) {
     context.report({
       node,
