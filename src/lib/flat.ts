@@ -34,14 +34,14 @@ const baseRules = {
   "@stylistic/no-explicit-any": "off",
 
   // Plugin base rules
-  "bstrict/max-function-size": ["warn", 15],
+  "bstrict/max-function-size": "warn",
   "bstrict/no-force": "warn",
   "bstrict/no-print": "warn",
   "bstrict/no-control-flow-in-assert": "warn",
   "bstrict/no-chained-traversal": "warn",
 };
 
-const rules: Record<string, TSESLint.RuleModule<string, unknown[]>> = {
+const rules: Record<string, TSESLint.RuleModule<string, readonly unknown[]>> = {
   "max-function-size": maxFunctionSize,
   "no-force": noForce,
   "no-pause-cypress": noPauseCypress,
