@@ -28,26 +28,59 @@ ruleTester.run("max-function-size", rule, {
 
     // Test that a function with more than 15 lines passes if it has a full line comment
     {
-      code: `// this is a comment\n function name() {\n${"test\n".repeat(15)}}`,
+      code: `// this is a comment\n function name() {\n${"test\n".repeat(16)}}`,
     },
     // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
     {
-      code: `test.describe('testing', () => {\n${"test\n".repeat(15)}})`,
+      code: `test.describe('testing', () => {\n${"test\n".repeat(16)}})`,
     },
     // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
     {
-      code: `describe('testing', () => {\n${"test\n".repeat(15)}})`,
+      code: `describe('testing', () => {\n${"test\n".repeat(16)}})`,
     },
-    // Test that a named function declaration with a test keyword name is ignored
+    // Test that a named function declaration that is bigger than 15 lines with a test keyword name is ignored
     {
-      code: `function describe() {\n${"test\n".repeat(15)}}`,
+      code: `function describe() {\n${"test\n".repeat(16)}}`,
+      options: [{ declarationIgnores: ["describe"] }],
     },
     // Test that an arrow function assigned to a variable with a test keyword name is ignored
     {
-      code: `const describe = () => {\n${"test\n".repeat(15)}}`,
+      code: `const describe = () => {\n${"test\n".repeat(16)}}`,
+      options: [{ declarationIgnores: ["describe"] }],
+    },
+    // Test that an arrow function inside a class with a valid keyword name is ignored
+    {
+      code: `class MyClass { \nasync describe() {${"test\n".repeat(16)}}}`,
+      options: [{ methodIgnores: ["describe"] }],
+    },
+    // Test that a function below the user-defined max passes
+    {
+      code: `function short() {\n${"test\n".repeat(9)}}`,
+      options: [{ maxLines: 10 }],
+    },
+    // Test that multiple ignore types can be used together
+    {
+      code: `
+        function describe() {${"test\n".repeat(16)}}
+        class MyClass { describe() {${"test\n".repeat(16)}}}
+      `,
+      options: [
+        {
+          declarationIgnores: ["describe"],
+          methodIgnores: ["describe"],
+        },
+      ],
     },
   ],
   invalid: [
+    // Test that an arrow function inside a class without a valid keyword gives an error
+    {
+      code: `class MyClass { myfunction() {\n${"test\n".repeat(15)}}}`,
+      errors: err("maxFunctionSize", 1, {
+        data: { lineCount: 15, maxLines: 15 },
+      }),
+    },
+
     // Test that a callback function with more than 15 lines inside a not ignored keyword call gives an error
     {
       code: `test.myfunction('testing', () => {\n${"test\n".repeat(15)}})`,
@@ -58,9 +91,9 @@ ruleTester.run("max-function-size", rule, {
 
     // Test that a callback function with more than 15 lines inside a not ignored keyword call gives an error
     {
-      code: `myfunction('testing', () => {\n${"test\n".repeat(15)}})`,
+      code: `myfunction('testing', () => {\n${"test\n".repeat(16)}})`,
       errors: err("maxFunctionSize", 1, {
-        data: { lineCount: 15, maxLines: 15 },
+        data: { lineCount: 16, maxLines: 15 },
       }),
     },
 
@@ -85,6 +118,15 @@ ruleTester.run("max-function-size", rule, {
       code: `const name = () => {\n${"test\n".repeat(15)}}`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
+      }),
+    },
+    // Test that an async arrow function inside a class without a valid keyword name fails
+    {
+      code: `class MyClass { describe = async () => {\n${"test\n".repeat(
+        16
+      )}}}`,
+      errors: err("maxFunctionSize", 1, {
+        data: { lineCount: 16, maxLines: 15 },
       }),
     },
   ],

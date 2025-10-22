@@ -20,16 +20,37 @@ type FunctionNodes =
   | TSESTree.FunctionExpression
   | TSESTree.ArrowFunctionExpression;
 
-const OPTIONS_SCHEMA: JSONSchema4 = {
-  oneOf: [
-    {
-      type: "integer",
-      minimum: 1,
-    },
-  ],
+type MaxFunctionLinesOptions = {
+  maxLines?: number;
+  callbackIgnores?: readonly string[];
+  declarationIgnores?: readonly string[];
+  methodIgnores?: readonly string[];
 };
 
-const IGNORE_KEYWORDS = new Set([
+const OPTIONS_SCHEMA: JSONSchema4 = {
+  type: "object",
+  properties: {
+    maxLines: { type: "integer", minimum: 1 },
+    callbackIgnores: {
+      type: "array",
+      items: { type: "string" },
+      uniqueItems: true,
+    },
+    declarationIgnores: {
+      type: "array",
+      items: { type: "string" },
+      uniqueItems: true,
+    },
+    methodIgnores: {
+      type: "array",
+      items: { type: "string" },
+      uniqueItems: true,
+    },
+  },
+  additionalProperties: false,
+};
+
+const DEFAULT_CALLBACK_IGNORES = [
   "describe",
   "context",
   "it",
@@ -40,12 +61,19 @@ const IGNORE_KEYWORDS = new Set([
   "after",
   "afterEach",
   "afterAll",
-]);
+] as const;
+
+const DEFAULT_DECLARATION_IGNORES: readonly string[] = [];
+const DEFAULT_METHOD_IGNORES: readonly string[] = [];
+const DEFAULT_MAX_LINES = 15;
 
 /**
  * Identifies if a function callback should be ignored by its name
  */
-function shouldIgnoreCallBack(node: FunctionNodes): boolean {
+function shouldIgnoreCallBack(
+  node: FunctionNodes,
+  ignored_keywords: Set<string>
+): boolean {
   const parent = node.parent;
 
   if (!parent) return false;
@@ -56,14 +84,14 @@ function shouldIgnoreCallBack(node: FunctionNodes): boolean {
 
   if (
     callee.type === AST_NODE_TYPES.Identifier &&
-    IGNORE_KEYWORDS.has(callee.name)
+    ignored_keywords.has(callee.name)
   )
     return true;
 
   if (
     callee.type === AST_NODE_TYPES.MemberExpression &&
     callee.property.type === AST_NODE_TYPES.Identifier &&
-    IGNORE_KEYWORDS.has(callee.property.name)
+    ignored_keywords.has(callee.property.name)
   ) {
     return true;
   }
@@ -74,12 +102,15 @@ function shouldIgnoreCallBack(node: FunctionNodes): boolean {
 /**
  * Identifies if a function declaration should be ignored by its name
  */
-function shouldIgnoreDeclaration(node: FunctionNodes): boolean {
+function shouldIgnoreDeclaration(
+  node: FunctionNodes,
+  ignored_keywords: Set<string>
+): boolean {
   if (
     (node.type === AST_NODE_TYPES.FunctionDeclaration ||
       node.type === AST_NODE_TYPES.FunctionExpression) &&
     node.id?.type === AST_NODE_TYPES.Identifier &&
-    IGNORE_KEYWORDS.has(node.id.name)
+    ignored_keywords.has(node.id.name)
   ) {
     return true;
   }
@@ -88,7 +119,35 @@ function shouldIgnoreDeclaration(node: FunctionNodes): boolean {
     node.type === AST_NODE_TYPES.ArrowFunctionExpression &&
     node.parent.type === AST_NODE_TYPES.VariableDeclarator &&
     node.parent.id.type === AST_NODE_TYPES.Identifier &&
-    IGNORE_KEYWORDS.has(node.parent.id.name)
+    ignored_keywords.has(node.parent.id.name)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Identifies if a class method should be ignored by its name
+ */
+function shouldIgnoreMethod(
+  node: FunctionNodes,
+  ignored_keywords: Set<string>
+) {
+  const parent = node.parent;
+
+  if (
+    parent.type === AST_NODE_TYPES.MethodDefinition &&
+    parent.key.type === AST_NODE_TYPES.Identifier &&
+    ignored_keywords.has(parent.key.name)
+  ) {
+    return true;
+  }
+
+  if (
+    parent.type === AST_NODE_TYPES.PropertyDefinition &&
+    parent.key.type === AST_NODE_TYPES.Identifier &&
+    ignored_keywords.has(parent.key.name)
   ) {
     return true;
   }
@@ -162,13 +221,27 @@ function validateLines(
  */
 function reportIfFunctionSizeExceedsLines(
   funcNode: FunctionNodes,
-  context: TSESLint.RuleContext<"maxFunctionSize", [number]>,
-  maxLines: number
+  context: TSESLint.RuleContext<
+    "maxFunctionSize",
+    readonly [MaxFunctionLinesOptions]
+  >,
+  maxLines: number,
+  callbackIgnores: readonly string[],
+  declarationIgnores: readonly string[],
+  methodIgnores: readonly string[]
 ): void {
   const sourceCode = context.sourceCode;
   const lines = sourceCode.lines;
 
-  if (shouldIgnoreCallBack(funcNode) || shouldIgnoreDeclaration(funcNode))
+  const ignoredCallBacks = new Set(callbackIgnores);
+  const ignoredDeclarations = new Set(declarationIgnores);
+  const ignoredMethods = new Set(methodIgnores);
+
+  if (
+    shouldIgnoreCallBack(funcNode, ignoredCallBacks) ||
+    shouldIgnoreDeclaration(funcNode, ignoredDeclarations) ||
+    shouldIgnoreMethod(funcNode, ignoredMethods)
+  )
     return;
 
   const commentLineNumbers = getFullCommentLineNumbers(
@@ -189,7 +262,10 @@ function reportIfFunctionSizeExceedsLines(
 
   if (
     lineCount >= maxLines &&
-    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context)
+    !nodeHasFullLineCommentAbove<
+      "maxFunctionSize",
+      readonly [MaxFunctionLinesOptions]
+    >(node, context)
   ) {
     context.report({
       node,
@@ -214,17 +290,59 @@ const rule = createRule({
         "Please, reduce the size of this method. A method can not contain more than {{maxLines}} lines. Currently, it has {{lineCount}} lines.",
     },
   },
-  defaultOptions: [15],
-  create(context, [maxLines]) {
+  defaultOptions: [
+    {
+      maxLines: DEFAULT_MAX_LINES,
+      callbackIgnores: [...DEFAULT_CALLBACK_IGNORES],
+      declarationIgnores: [...DEFAULT_DECLARATION_IGNORES],
+      methodIgnores: [...DEFAULT_METHOD_IGNORES],
+    },
+  ],
+  create(context, [userOptions]: readonly [MaxFunctionLinesOptions] = [{}]) {
+    const options = {
+      maxLines: userOptions.maxLines ?? DEFAULT_MAX_LINES,
+      callbackIgnores: userOptions.callbackIgnores ?? [
+        ...DEFAULT_CALLBACK_IGNORES,
+      ],
+      declarationIgnores: userOptions.declarationIgnores ?? [
+        ...DEFAULT_DECLARATION_IGNORES,
+      ],
+      methodIgnores: userOptions.methodIgnores ?? [...DEFAULT_METHOD_IGNORES],
+    };
+
+    const { maxLines, callbackIgnores, declarationIgnores, methodIgnores } =
+      options;
+
     return {
       FunctionDeclaration(node) {
-        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+        reportIfFunctionSizeExceedsLines(
+          node,
+          context,
+          maxLines,
+          callbackIgnores,
+          declarationIgnores,
+          methodIgnores
+        );
       },
       FunctionExpression(node) {
-        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+        reportIfFunctionSizeExceedsLines(
+          node,
+          context,
+          maxLines,
+          callbackIgnores,
+          declarationIgnores,
+          methodIgnores
+        );
       },
       ArrowFunctionExpression(node) {
-        reportIfFunctionSizeExceedsLines(node, context, maxLines);
+        reportIfFunctionSizeExceedsLines(
+          node,
+          context,
+          maxLines,
+          callbackIgnores,
+          declarationIgnores,
+          methodIgnores
+        );
       },
     };
   },

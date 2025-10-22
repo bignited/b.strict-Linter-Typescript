@@ -48,7 +48,7 @@ export default [
       "n/no-extraneous-require": ["error", { allowModules: ["jest-config"] }],
 
       // Using the rules defined in the eslint-plugin-bstrict plugin
-      "bstrict/max-function-size": ["warn", 15],
+      "bstrict/max-function-size": ["warn"],
       "bstrict/no-unnecessary-waiting-cypress": "error",
       "bstrict/no-unnecessary-waiting-playwright": "error",
       "bstrict/no-force": "error",
