@@ -29,6 +29,48 @@ const OPTIONS_SCHEMA: JSONSchema4 = {
   ],
 };
 
+const IGNORE_KEYWORDS = new Set([
+  "describe",
+  "context",
+  "it",
+  "test",
+  "before",
+  "beforeEach",
+  "beforeAll",
+  "after",
+  "afterEach",
+  "afterAll",
+]);
+
+/**
+ * Identifies if a node should be ignored
+ */
+function shouldIgnore(node: TSESTree.Node): boolean {
+  const parent = node.parent;
+
+  if (!parent) return false;
+
+  if (parent.type !== AST_NODE_TYPES.CallExpression) return false;
+
+  const callee = parent.callee;
+
+  if (
+    callee.type === AST_NODE_TYPES.Identifier &&
+    IGNORE_KEYWORDS.has(callee.name)
+  )
+    return true;
+
+  if (
+    callee.type === AST_NODE_TYPES.MemberExpression &&
+    callee.property.type === AST_NODE_TYPES.Identifier &&
+    IGNORE_KEYWORDS.has(callee.property.name)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 /**
  * Identifies if a node is a FunctionExpression which is embedded within a MethodDefinition or Property
  */
@@ -119,7 +161,8 @@ function reportIfFunctionSizeExceedsLines(
 
   if (
     lineCount >= maxLines &&
-    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context)
+    !nodeHasFullLineCommentAbove<"maxFunctionSize", [number]>(node, context) &&
+    !shouldIgnore(funcNode)
   ) {
     context.report({
       node,

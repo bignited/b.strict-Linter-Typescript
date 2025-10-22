@@ -30,8 +30,24 @@ ruleTester.run("max-function-size", rule, {
     {
       code: `// this is a comment\n function name() {\n${"test\n".repeat(15)}}`,
     },
+    // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
+    {
+      code: `test.describe('testing', () => {\n${"test\n".repeat(15)}})`,
+    },
+    // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
+    {
+      code: `describe('testing', () => {\n${"test\n".repeat(15)}})`,
+    },
   ],
   invalid: [
+    // Test that a callback function with more than 15 lines inside a not ignored keyword call gives an error
+    {
+      code: `test.myfunction('testing', () => {\n${"test\n".repeat(15)}})`,
+      errors: err("maxFunctionSize", 1, {
+        data: { lineCount: 15, maxLines: 15 },
+      }),
+    },
+
     // Test that a function with 15 lines fails
     {
       code: `function name() {\n${"test\n".repeat(15)}}`,
