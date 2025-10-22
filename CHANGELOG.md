@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.2](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.1...v4.3.2) (2025-10-22)
+
+
+### Bug Fixes
+
+* max function size rule: add options to ignore function callbacks, declarations and class methods ([#30](https://github.com/bignited/b.strict-Linter-Javascript/issues/30)) ([1cf39b7](https://github.com/bignited/b.strict-Linter-Javascript/commit/1cf39b79f204763e63c9bd4d9e5a0ef6fbd7011b))
+
 ## [4.3.1](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.0...v4.3.1) (2025-10-09)
 
 
