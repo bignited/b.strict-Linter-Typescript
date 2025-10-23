@@ -16,10 +16,10 @@ An [ESLint](https://eslint.org) plugin for [b.ignited](https://bignited.be).
 
 ## Requirements
 
-- [ESLint](https://www.npmjs.com/package/eslint) `v9` or higher  
+- [ESLint](https://www.npmjs.com/package/eslint) `v9` or higher.
   This plugin supports **Flat Config files** (`eslint.config.*js`) introduced in ESLint 9+.
 
-- [Stylistic](https://www.npmjs.com/package/@stylistic/eslint-plugin) `v5.4.0` or higher
+- [Stylistic](https://www.npmjs.com/package/@stylistic/eslint-plugin) `v5.4.0` or higher.
   This plugin uses `@stylistic/eslint-plugin` rules on top of our own custom rules.
 
 ## Installation
@@ -44,7 +44,9 @@ This plugin ships with ready-to-use flat config presets so you can get started i
 npx eslint --init
 ```
 
-Now you can just import `bstrict` and `stylistic` into `eslint.config.mjs` Make sure to add them as `plugins` + add the desired preset / rules to the `rules`
+This will create a `eslint.config.*js` with default values.
+
+Now you can just import `bstrict` into `eslint.config.*js` and add the desired preset.
 
 More info on available presets / rules [here](#rules)
 
@@ -54,18 +56,15 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import { defineConfig } from "eslint/config";
 import bstrict from "eslint-plugin-bstrict";
-import stylistic from "@stylistic/eslint-plugin";
 
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic },
+    plugins: { js },
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
-    rules: {
-      ...bstrict.configs.recommended.rules, // or playwright.rules or cypress.rules
-    },
   },
+  bstrict.configs.recommended, // or .cypress or .playwright instead of .recommended
   tseslint.configs.recommended,
 ]);
 ```
@@ -76,7 +75,7 @@ If you need fine-grained control:
 
 ### Select specific rules only
 
-When you dont need a preset but just a particular set of rules:
+When you dont need a preset but just a particular set of rules, make sure to also import `stylistic` and add both plugins to the `plugins` property + add the desired preset / rules to the `rules` property.
 
 ```js
 import js from "@eslint/js";
@@ -84,17 +83,18 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import { defineConfig } from "eslint/config";
 import bstrict from "eslint-plugin-bstrict";
-import stylistic from "@stylistic/eslint-plugin";
+import stylistic from "@stylistic/eslint-plugin"; // import stylistic
 
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic },
+    plugins: { js: js, bstrict: bstrict, "@stylistic": stylistic }, // add plugins
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
     rules: {
-      "bstrict/max-function-size": ["warn", 20],
-      "bstrict/no-print": ["warn"],
+      // add the desired specific rules here
+      "bstrict/max-function-size": "warn",
+      "bstrict/no-print": "warn",
     },
   },
   tseslint.configs.recommended,
@@ -120,8 +120,8 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
     rules: {
-      ...bstrict.configs.recommended.rules,
-      "@stylistic/indent": "off",
+      ...bstrict.configs.recommended.rules, // important!, first declare the rules
+      "@stylistic/indent": "off", // and THEN overwrite it
     },
   },
   tseslint.configs.recommended,
@@ -131,6 +131,8 @@ export default defineConfig([
 ## Disable rules
 
 You can disable specific rules per file, for a portion of the file or more.
+
+### Examples:
 
 Disable the `bstrict/max-function-size` rule for the entire file by placing this at the start of the file:
 
@@ -148,11 +150,11 @@ function foo() {
 /* eslint-enable bstrict/max-function-size */
 ```
 
-It is also possible to ignore the rules by placing a full-line comment right above them. The plugin will treat that as an explanation to the piece of code:
+It is also possible to ignore the rule by placing a full-line comment right above them. The plugin will treat that as an explanation to the piece of code:
 
 ```js
 // A force here is necessary because X.
-cy.get("selector").click({ force: true });
+cy.get("selector").click({ force: true }); // No warning
 ```
 
 For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/rules) documentation.
