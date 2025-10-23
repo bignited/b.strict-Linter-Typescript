@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.0](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.2...v4.4.0) (2025-10-23)
+
+
+### Features
+
+* No poor html selectors for cypress and playwright ([#32](https://github.com/bignited/b.strict-Linter-Javascript/issues/32)) ([577322a](https://github.com/bignited/b.strict-Linter-Javascript/commit/577322a7eeddf0d8b0bd829c3e3ffba6a59e60ae))
+
 ## [4.3.2](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.1...v4.3.2) (2025-10-22)
 
 
