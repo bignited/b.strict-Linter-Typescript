@@ -12,6 +12,8 @@ import oneAssertPerTestCypress from "./rules/one-assert-per-test-cypress.js";
 import oneAssertPerTestPlaywright from "./rules/one-assert-per-test-playwright.js";
 import noControlFlowInAssert from "./rules/no-control-flow-in-assert.js";
 import noChainedTraversal from "./rules/no-chained-traversal.js";
+import noPoorHtmlSelectorCypress from "./rules/no-poor-html-selector-cypress.js";
+import noPoorHtmlSelectorPlaywright from "./rules/no-poor-html-selector-playwright.js";
 
 /**
  * @fileoverview ESLint plugin with b.strict rules.
@@ -52,6 +54,8 @@ const rules: Record<string, TSESLint.RuleModule<string, readonly unknown[]>> = {
   "one-assert-per-test-playwright": oneAssertPerTestPlaywright,
   "no-control-flow-in-assert": noControlFlowInAssert,
   "no-chained-traversal": noChainedTraversal,
+  "no-poor-html-selector-cypress": noPoorHtmlSelectorCypress,
+  "no-poor-html-selector-playwright": noPoorHtmlSelectorPlaywright,
 };
 
 const commonGlobals: Record<string, boolean> = {
@@ -88,6 +92,7 @@ const cypress = {
     "bstrict/no-unnecessary-waiting-cypress": "warn",
     "bstrict/no-pause-cypress": "warn",
     "bstrict/one-assert-per-test-cypress": "warn",
+    "bstrict/no-poor-html-selector-cypress": "warn",
   },
 };
 
@@ -98,6 +103,7 @@ const playwright = {
     ...baseRules,
     "bstrict/no-unnecessary-waiting-playwright": "warn",
     "bstrict/one-assert-per-test-playwright": "warn",
+    "bstrict/no-poor-html-selector-playwright": "warn",
   },
 };
 

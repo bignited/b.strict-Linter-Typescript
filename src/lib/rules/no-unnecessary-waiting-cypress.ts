@@ -9,7 +9,7 @@ import type {
   Scope,
   Reference,
 } from "@typescript-eslint/scope-manager";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { nodeHasFullLineCommentAbove } from "../utils/line-numbers.js";
 
 /**
  * @fileoverview A rule to enforce no waiting time in Cypress & Playwright tests, unless it is necessary for the test to pass you can put a comment above.

@@ -5,9 +5,9 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { RuleListener } from "@typescript-eslint/utils/ts-eslint";
-import { isCypressCallChained } from "../cypress-support/called-by-cypress.js";
+import { isCallChainedFromNode } from "../utils/called-by-cypress.js";
 import { isNode } from "../utils/check-node.js";
-import { nodeHasFullLineCommentAbove } from "../comment-support/line-numbers.js";
+import { nodeHasFullLineCommentAbove } from "../utils/line-numbers.js";
 
 const CONTROL_FLOW_TYPES = new Set([
   AST_NODE_TYPES.IfStatement,
@@ -39,7 +39,7 @@ function isAssertionCallbackCall(node: TSESTree.CallExpression): boolean {
     node.callee.property.type === AST_NODE_TYPES.Identifier &&
     node.callee.property.name === "should"
   ) {
-    return isCypressCallChained(node.callee.object);
+    return isCallChainedFromNode(node.callee.object, "cy");
   }
 
   return false;

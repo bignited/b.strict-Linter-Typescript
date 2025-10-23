@@ -5,10 +5,8 @@ import {
   TSESTree,
 } from "@typescript-eslint/utils";
 import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
-import {
-  getFullCommentLineNumbers,
-  nodeHasFullLineCommentAbove,
-} from "../comment-support/line-numbers.js";
+import { nodeHasFullLineCommentAbove } from "../utils/line-numbers.js";
+import { SourceCode } from "@typescript-eslint/utils/ts-eslint";
 
 /**
  * @fileoverview A rule to enforce a maximum function size of 15 lines.
@@ -153,6 +151,34 @@ function shouldIgnoreMethod(
   }
 
   return false;
+}
+
+/**
+ * Given a list of comment nodes, return a map with numeric keys and comment token values.
+ */
+export function getFullCommentLineNumbers(
+  comments: TSESTree.Comment[],
+  sourceCode: SourceCode
+): Map<number, TSESTree.Comment> {
+  const map = new Map<number, TSESTree.Comment>();
+
+  for (const comment of comments) {
+    for (
+      let line = comment.loc.start.line;
+      line <= comment.loc.end.line;
+      line++
+    ) {
+      // Check if is full line comment
+      if (
+        comment.loc.start.column === 0 &&
+        comment.loc.end.column === sourceCode.lines[line - 1].length
+      ) {
+        map.set(line, comment);
+      }
+    }
+  }
+
+  return map;
 }
 
 /**
