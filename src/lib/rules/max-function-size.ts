@@ -18,7 +18,7 @@ type FunctionNodes =
   | TSESTree.FunctionExpression
   | TSESTree.ArrowFunctionExpression;
 
-type MaxFunctionLinesOptions = {
+type MaxFunctionSizeOptions = {
   maxLines?: number;
   callbackIgnores?: readonly string[];
   declarationIgnores?: readonly string[];
@@ -61,8 +61,6 @@ const DEFAULT_CALLBACK_IGNORES = [
   "afterAll",
 ] as const;
 
-const DEFAULT_DECLARATION_IGNORES: readonly string[] = [];
-const DEFAULT_METHOD_IGNORES: readonly string[] = [];
 const DEFAULT_MAX_LINES = 15;
 
 /**
@@ -249,12 +247,12 @@ function reportIfFunctionSizeExceedsLines(
   funcNode: FunctionNodes,
   context: TSESLint.RuleContext<
     "maxFunctionSize",
-    readonly [MaxFunctionLinesOptions]
+    readonly [MaxFunctionSizeOptions]
   >,
   maxLines: number,
   callbackIgnores: readonly string[],
-  declarationIgnores: readonly string[],
-  methodIgnores: readonly string[]
+  declarationIgnores?: readonly string[],
+  methodIgnores?: readonly string[]
 ): void {
   const sourceCode = context.sourceCode;
   const lines = sourceCode.lines;
@@ -290,7 +288,7 @@ function reportIfFunctionSizeExceedsLines(
     lineCount >= maxLines &&
     !nodeHasFullLineCommentAbove<
       "maxFunctionSize",
-      readonly [MaxFunctionLinesOptions]
+      readonly [MaxFunctionSizeOptions]
     >(node, context)
   ) {
     context.report({
@@ -320,20 +318,16 @@ const rule = createRule({
     {
       maxLines: DEFAULT_MAX_LINES,
       callbackIgnores: [...DEFAULT_CALLBACK_IGNORES],
-      declarationIgnores: [...DEFAULT_DECLARATION_IGNORES],
-      methodIgnores: [...DEFAULT_METHOD_IGNORES],
     },
   ],
-  create(context, [userOptions]: readonly [MaxFunctionLinesOptions] = [{}]) {
+  create(context, [userOptions]: readonly [MaxFunctionSizeOptions] = [{}]) {
     const options = {
       maxLines: userOptions.maxLines ?? DEFAULT_MAX_LINES,
       callbackIgnores: userOptions.callbackIgnores ?? [
         ...DEFAULT_CALLBACK_IGNORES,
       ],
-      declarationIgnores: userOptions.declarationIgnores ?? [
-        ...DEFAULT_DECLARATION_IGNORES,
-      ],
-      methodIgnores: userOptions.methodIgnores ?? [...DEFAULT_METHOD_IGNORES],
+      declarationIgnores: userOptions.declarationIgnores,
+      methodIgnores: userOptions.methodIgnores,
     };
 
     const { maxLines, callbackIgnores, declarationIgnores, methodIgnores } =

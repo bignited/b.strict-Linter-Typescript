@@ -2,65 +2,80 @@ import { RuleTester } from "@typescript-eslint/rule-tester";
 import rule from "../../dist/lib/rules/no-poor-html-selector-playwright.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
+/**
+ * @fileoverview Tests for no-poor-html-selector-playwright rule.
+ * @author b.ignited
+ */
+
 const ruleTester = new RuleTester();
 
 ruleTester.run("no-poor-html-selector-playwright", rule, {
   valid: [
-    // Simple CSS selector with one combinator
     {
+      name: "Should pass: simple CSS selector with one combinator",
       code: "page.locator('.sidebar > .menu')",
     },
-    // Simple XPath selector with one slash level
     {
+      name: "Should pass: simple XPath selector with one slash level",
       code: "page.locator('//div[@id=\"test\"]/a')",
     },
-    // Text-based locator (Playwright API)
     {
+      name: "Should pass: text-based locator using getByText()",
       code: "page.getByText('Submit')",
     },
-    // Role-based locator (Playwright best practice)
     {
+      name: "Should pass: role-based locator using getByRole() (Playwright best practice)",
       code: "page.getByRole('button', { name: 'Submit' })",
     },
-    // Test ID locator
     {
+      name: "Should pass: test ID-based locator using getByTestId()",
       code: "page.getByTestId('login-button')",
+    },
+    {
+      name: "Should pass: variable does not match default pattern 'page' and is therefore valid",
+      code: "const home = { title: '.sidebar > .menu > li > a' }",
     },
   ],
 
   invalid: [
-    // Overly complex CSS selector with multiple child combinators
     {
+      name: "Should fail: variable matches custom pattern 'po' and contains a poor selector",
+      code: "const homePO = { title: '.sidebar > .menu > li > a' }",
+      options: [{ pageObjectPattern: "po" }],
+      errors: err("noPoorHtmlSelector"),
+    },
+    {
+      name: "Should fail: variable matches default pattern 'page' and contains a poor selector",
+      code: "const homePage = { title: '.sidebar > .menu > li > a' }",
+      errors: err("noPoorHtmlSelector"),
+    },
+    {
+      name: "Should fail: overly complex CSS selector with multiple child combinators",
       code: "page.locator('.sidebar > .menu > li > a')",
       errors: err("noPoorHtmlSelector"),
     },
-
-    // Overly complex XPath selector with too many slashes
     {
+      name: "Should fail: overly complex XPath selector with too many nested slashes",
       code: "page.locator('//div[@id=\"test\"]/a/div')",
       errors: err("noPoorHtmlSelector"),
     },
-
-    // Position-based CSS selector using nth-child()
     {
+      name: "Should fail: position-based CSS selector using nth-child()",
       code: "page.locator('li:nth-child(3)')",
       errors: err("noPoorHtmlSelector"),
     },
-
-    // Framework-dependent selector (Bootstrap-style .btn classes)
     {
+      name: "Should fail: framework-dependent selector using Bootstrap-style .btn classes",
       code: "page.locator('.btn.btn-primary')",
       errors: err("noPoorHtmlSelector"),
     },
-
-    // Auto-generated/randomized selector (e.g. build artifact class)
     {
+      name: "Should fail: potentially auto-generated selector with random alphanumeric class",
       code: "page.locator('.card-123abc')",
       errors: err("noPoorHtmlSelector"),
     },
-
-    // Selector with multiple traversal combinators
     {
+      name: "Should fail: selector containing multiple traversal combinators",
       code: "page.locator('.a > .b + .c ~ .d')",
       errors: err("noPoorHtmlSelector"),
     },

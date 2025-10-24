@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/no-pause-cypress.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for no-pause.ts rule.
+ * @fileoverview Tests for no-pause-cypress rule.
  * @author b.ignited
  */
 
@@ -11,54 +11,47 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("no-pause-cypress", rule, {
   valid: [
-    // Test that regular pause function is called
     {
+      name: "Should pass: standalone pause() function call (not cy.pause)",
       code: "pause()",
     },
-
-    // test that only cy can call for pause
     {
+      name: "Should pass: pause() called from non-cy object",
       code: "foo.pause()",
     },
-
-    // Test that does button double click function
     {
+      name: "Should pass: standard Cypress action without pause (dblclick)",
       code: "cy.get('button').dblclick()",
     },
-
-    // Test that comment before pause function is called
     {
+      name: "Should pass: cy.pause() call preceded by a comment line",
       code: "// this is a comment\n cy.get('button').pause()",
     },
   ],
 
   invalid: [
-    // Test that cy.pause() function is called
     {
+      name: "Should fail: cy.pause() called directly",
       code: "cy.pause()",
       errors: err("noPauseCypress"),
     },
-
-    // Test that cy.pause() function is called with options
     {
+      name: "Should fail: cy.pause() called with options",
       code: "cy.pause({ log: false })",
       errors: err("noPauseCypress"),
     },
-
-    // Test that pause() function is called after another call function
     {
+      name: "Should fail: cy.get() chain ending with pause()",
       code: "cy.get('button').pause()",
       errors: err("noPauseCypress"),
     },
-
-    // Test that pause() function is called before another function
     {
+      name: "Should fail: cy.pause() called before another command in chain",
       code: "cy.pause().getCookie('app')",
       errors: err("noPauseCypress"),
     },
-
-    // Test that pause() function is called complex call function
     {
+      name: "Should fail: cy.get() chain with multiple assertions followed by pause()",
       code: "cy.get('button').should('have.attr', 'value').and('match', submit).pause()",
       errors: err("noPauseCypress"),
     },

@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/one-assert-per-test-cypress.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for one-assert-per-test-cypress.ts rule.
+ * @fileoverview Tests for one-assert-per-test-cypress rule.
  * @author b.ignited
  */
 
@@ -11,32 +11,32 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("one-assert-per-test-cypress", rule, {
   valid: [
-    // Test that a single expect assertion is allowed
     {
+      name: "Should pass: test with a single expect() assertion",
       code: `
       it('single expect assertion', () => {
         expect(true).to.be.true;
       });
       `,
     },
-    // Test that a single should assertion is allowed
     {
+      name: "Should pass: test with a single cy.should() assertion",
       code: `
       it('single should assertion', () => {
         cy.get('button').should('be.visible');
       });
       `,
     },
-    // Test that a test without assertions is allowed
     {
+      name: "Should pass: test without any assertions",
       code: `
       it('no assertions', () => {
         const a = 1 + 2;
       });
       `,
     },
-    // Test that a nested assert is allowed
     {
+      name: "Should pass: test with one nested expect() assertion",
       code: `
       it('nested single assertion', () => {
         if (true) {
@@ -45,8 +45,8 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       });
       `,
     },
-    // Test that a test with 2 expects gives no error when it has a full line comment above it
     {
+      name: "Should pass: test with multiple assertions preceded by a full-line comment",
       code: `
       // This is a comment
       it('two expects', () => {
@@ -56,9 +56,10 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       `,
     },
   ],
+
   invalid: [
-    // Test that two expect assertions is not allowed
     {
+      name: "Should fail: test containing two expect() assertions",
       code: `
       it('two expects', () => {
         expect(true).to.be.true;
@@ -67,8 +68,8 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       `,
       errors: err("oneAssertPerTestCypress"),
     },
-    // Test that a combination of expect and assert is not allowed
     {
+      name: "Should fail: test combining expect() and cy.should() assertions",
       code: `
       it('expect and should', () => {
         expect(true).to.be.true;
@@ -77,8 +78,8 @@ ruleTester.run("one-assert-per-test-cypress", rule, {
       `,
       errors: err("oneAssertPerTestCypress"),
     },
-    // Test that multiple nested assertions is not allowed
     {
+      name: "Should fail: test containing multiple nested assertions",
       code: `
       it('multiple nested assertions', () => {
         if (true) {

@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/max-function-size.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for max-function-size.ts rule.
+ * @fileoverview Tests for max-function-size rule.
  * @author b.ignited
  */
 
@@ -11,55 +11,52 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("max-function-size", rule, {
   valid: [
-    // Test single line standalone function
     {
+      name: "Should pass: single-line standalone function",
       code: "function name() {}",
     },
-
-    // Test that a function with 14 lines passes
     {
+      name: "Should pass: function with 14 lines",
       code: `function name() {\n${"test\n".repeat(14)}}`,
     },
-
-    // Test that a function with 15 lines of comments passes
     {
+      name: "Should pass: function with 15 lines of comments only",
       code: `function name() {\n${"// test\n".repeat(15)}}`,
     },
-
-    // Test that a function with more than 15 lines passes if it has a full line comment
     {
+      name: "Should pass: function with more than 15 lines preceded by a full-line comment",
       code: `// this is a comment\n function name() {\n${"test\n".repeat(16)}}`,
     },
-    // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
     {
+      name: "Should pass: callback with more than 15 lines inside ignored keyword call 'test.describe'",
       code: `test.describe('testing', () => {\n${"test\n".repeat(16)}})`,
     },
-    // Test that a callback function with more than 15 lines inside an ignored keyword call is ignored
     {
+      name: "Should pass: callback with more than 15 lines inside ignored keyword call 'describe'",
       code: `describe('testing', () => {\n${"test\n".repeat(16)}})`,
     },
-    // Test that a named function declaration that is bigger than 15 lines with a test keyword name is ignored
     {
+      name: "Should pass: named function larger than 15 lines ignored via declarationIgnores option",
       code: `function describe() {\n${"test\n".repeat(16)}}`,
       options: [{ declarationIgnores: ["describe"] }],
     },
-    // Test that an arrow function assigned to a variable with a test keyword name is ignored
     {
+      name: "Should pass: arrow function assigned to variable ignored via declarationIgnores option",
       code: `const describe = () => {\n${"test\n".repeat(16)}}`,
       options: [{ declarationIgnores: ["describe"] }],
     },
-    // Test that an arrow function inside a class with a valid keyword name is ignored
     {
+      name: "Should pass: async arrow method inside class ignored via methodIgnores option",
       code: `class MyClass { \nasync describe() {${"test\n".repeat(16)}}}`,
       options: [{ methodIgnores: ["describe"] }],
     },
-    // Test that a function below the user-defined max passes
     {
+      name: "Should pass: function below user-defined max lines",
       code: `function short() {\n${"test\n".repeat(9)}}`,
       options: [{ maxLines: 10 }],
     },
-    // Test that multiple ignore types can be used together
     {
+      name: "Should pass: multiple ignore types combined (declaration and method)",
       code: `
         function describe() {${"test\n".repeat(16)}}
         class MyClass { describe() {${"test\n".repeat(16)}}}
@@ -72,56 +69,52 @@ ruleTester.run("max-function-size", rule, {
       ],
     },
   ],
+
   invalid: [
-    // Test that an arrow function inside a class without a valid keyword gives an error
     {
+      name: "Should fail: class method exceeding 15 lines without ignore keyword",
       code: `class MyClass { myfunction() {\n${"test\n".repeat(15)}}}`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
       }),
     },
-
-    // Test that a callback function with more than 15 lines inside a not ignored keyword call gives an error
     {
+      name: "Should fail: callback with more than 15 lines in non-ignored keyword call 'test.myfunction'",
       code: `test.myfunction('testing', () => {\n${"test\n".repeat(15)}})`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
       }),
     },
-
-    // Test that a callback function with more than 15 lines inside a not ignored keyword call gives an error
     {
+      name: "Should fail: callback with more than 15 lines in plain call 'myfunction'",
       code: `myfunction('testing', () => {\n${"test\n".repeat(16)}})`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 16, maxLines: 15 },
       }),
     },
-
-    // Test that a function with 15 lines fails
     {
+      name: "Should fail: function declaration with 15 lines",
       code: `function name() {\n${"test\n".repeat(15)}}`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
       }),
     },
-
-    // Test that a function with 15 lines of not full comment lines fails
     {
+      name: "Should fail: function with 15 lines containing partial comment lines",
       code: `function name() {\n${"test // test\n".repeat(15)}}`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
       }),
     },
-
-    // Test that an arrow function with 15 lines of not full comment lines fails
     {
+      name: "Should fail: arrow function with 15 lines of non-comment content",
       code: `const name = () => {\n${"test\n".repeat(15)}}`,
       errors: err("maxFunctionSize", 1, {
         data: { lineCount: 15, maxLines: 15 },
       }),
     },
-    // Test that an async arrow function inside a class without a valid keyword name fails
     {
+      name: "Should fail: async arrow function inside class exceeding 15 lines without ignore keyword",
       code: `class MyClass { describe = async () => {\n${"test\n".repeat(
         16
       )}}}`,

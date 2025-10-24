@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/one-assert-per-test-playwright.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for one-assert-per-test-playwright.ts rule.
+ * @fileoverview Tests for one-assert-per-test-playwright rule.
  * @author b.ignited
  */
 
@@ -11,24 +11,24 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("one-assert-per-test-playwright", rule, {
   valid: [
-    // Test that a single expect is allowed
     {
+      name: "Should pass: test with a single expect() assertion",
       code: `
       test('single expect', () => {
         expect(true).toBe(true);
       });
       `,
     },
-    // Test that a test without assertions is allowed
     {
+      name: "Should pass: test without any assertions",
       code: `
       test('no assertions', () => {
         const x = 1 + 1;
       });
       `,
     },
-    // Test that a single nested expect is allowed
     {
+      name: "Should pass: test with one nested expect() assertion",
       code: `
       test('nested single expect', () => {
         if (true) {
@@ -37,8 +37,8 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       });
       `,
     },
-    // Test that a test with 2 expects gives no error when it has a full line comment above it
     {
+      name: "Should pass: test with multiple expects preceded by a full-line comment",
       code: `
       // This is a comment
       test('two expects', () => {
@@ -48,9 +48,10 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       `,
     },
   ],
+
   invalid: [
-    // Test that multiple expects is not allowed
     {
+      name: "Should fail: test containing multiple expect() assertions",
       code: `
       test('two expects', () => {
         expect(true).toBe(true);
@@ -59,8 +60,8 @@ ruleTester.run("one-assert-per-test-playwright", rule, {
       `,
       errors: err("oneAssertPerTestPlaywright"),
     },
-    // Test that multiple nestes expects is not allowed
     {
+      name: "Should fail: test containing multiple nested expect() assertions",
       code: `
       test('multiple nested expects', () => {
         if (true) {
