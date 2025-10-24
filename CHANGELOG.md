@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.1](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.4.0...v4.4.1) (2025-10-24)
+
+
+### Bug Fixes
+
+* Improved no-poor-html-selectors + reorganized all tests ([#34](https://github.com/bignited/b.strict-Linter-Javascript/issues/34)) ([8ebad5a](https://github.com/bignited/b.strict-Linter-Javascript/commit/8ebad5a7a5c1db85670dfd490611b612f7c39acc))
+
 ## [4.4.0](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.3.2...v4.4.0) (2025-10-23)
 
 
