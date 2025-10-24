@@ -5,13 +5,41 @@ import {
 } from "@typescript-eslint/utils";
 import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 import { isPoorSelector } from "../utils/selectors.js";
+import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
+
+const OPTIONS_SCHEMA: JSONSchema4 = {
+  type: "object",
+  properties: {
+    pageObjectPattern: {
+      type: "string",
+      description:
+        "Regex (string) pattern to match variable names treated as page objects. Default: 'page'",
+    },
+  },
+  additionalProperties: false,
+};
+
+type NoPoorHtmlSelectorOptions = {
+  pageObjectPattern?: string;
+};
+
+type PoorSelectorRuleConfig = {
+  frameworkName: string;
+  rootObjectName: string;
+  entryFunctions: string[];
+};
+
+const DEFAULT_OBJECT_PATTERN = "page";
 
 /**
- * Reports poor or fragile HTML selectors used in test frameworks.
+ * Reports poor or fragile HTML selectors in framework calls like cy.get() or page.locator().
  */
-function reportIfPoorHtmlSelector(
+function reportIfPoorHtmlSelectorInCallExpression(
   node: TSESTree.CallExpression,
-  context: RuleContext<"noPoorHtmlSelector", []>,
+  context: RuleContext<
+    "noPoorHtmlSelector",
+    readonly [NoPoorHtmlSelectorOptions]
+  >,
   rootObjectName: string,
   entryFunctions: string[]
 ) {
@@ -26,23 +54,44 @@ function reportIfPoorHtmlSelector(
     if (
       firstArg &&
       firstArg.type === AST_NODE_TYPES.Literal &&
-      typeof firstArg.value === "string"
+      typeof firstArg.value === "string" &&
+      isPoorSelector(firstArg.value)
     ) {
-      const selector = firstArg.value;
-      if (isPoorSelector(selector)) {
-        context.report({
-          node: firstArg,
-          messageId: "noPoorHtmlSelector",
-        });
-      }
+      context.report({
+        node: firstArg,
+        messageId: "noPoorHtmlSelector",
+      });
     }
   }
 }
 
-interface PoorSelectorRuleConfig {
-  frameworkName: string;
-  rootObjectName: string;
-  entryFunctions: string[];
+/**
+ * Reports poor selectors defined in page object–like variable declarations.
+ */
+function reportIfPoorHtmlSelectorInVariable(
+  node: TSESTree.VariableDeclarator,
+  context: RuleContext<
+    "noPoorHtmlSelector",
+    readonly [NoPoorHtmlSelectorOptions]
+  >,
+  pageObjectRegex: RegExp
+) {
+  if (
+    node.id.type === AST_NODE_TYPES.Identifier &&
+    node.init?.type === AST_NODE_TYPES.ObjectExpression &&
+    pageObjectRegex.test(node.id.name)
+  ) {
+    for (const prop of node.init.properties) {
+      if (
+        prop.type === AST_NODE_TYPES.Property &&
+        prop.value.type === AST_NODE_TYPES.Literal &&
+        typeof prop.value.value === "string" &&
+        isPoorSelector(prop.value.value)
+      ) {
+        context.report({ node: prop.value, messageId: "noPoorHtmlSelector" });
+      }
+    }
+  }
 }
 
 const createRule = ESLintUtils.RuleCreator((name) => name);
@@ -61,23 +110,35 @@ export function createPoorSelectorRule({
     meta: {
       type: "suggestion",
       docs: {
-        description: `Disallow poor HTML selectors in ${frameworkName} tests.`,
+        description: `Disallow poor HTML selectors.`,
       },
       messages: {
         noPoorHtmlSelector: `Avoid complex or fragile HTML traversal selectors in ${frameworkName} tests.`,
       },
-      schema: [],
+      schema: [OPTIONS_SCHEMA],
     },
-    defaultOptions: [],
-    create(context) {
+    defaultOptions: [
+      {
+        pageObjectPattern: DEFAULT_OBJECT_PATTERN,
+      },
+    ],
+    create(context, [userOptions]: readonly [NoPoorHtmlSelectorOptions]) {
+      const pageObjectRegex = new RegExp(
+        userOptions.pageObjectPattern ?? DEFAULT_OBJECT_PATTERN,
+        "i"
+      );
+
       return {
         CallExpression(node) {
-          reportIfPoorHtmlSelector(
+          reportIfPoorHtmlSelectorInCallExpression(
             node,
             context,
             rootObjectName,
             entryFunctions
           );
+        },
+        VariableDeclarator(node) {
+          reportIfPoorHtmlSelectorInVariable(node, context, pageObjectRegex);
         },
       };
     },
