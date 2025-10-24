@@ -3,7 +3,7 @@ import { RuleTester } from "@typescript-eslint/rule-tester";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for no-control-flow-in-assert.ts rule.
+ * @fileoverview Tests for no-control-flow-in-assert rule.
  * @author b.ignited
  */
 
@@ -11,32 +11,32 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("no-control-flow-in-assert", rule, {
   valid: [
-    // Test simple expect without control flow
     {
+      name: "Should pass: simple expect without control flow",
       code: `expect(value).toBe(1);`,
     },
-    // Test function passed to expect without control flow
     {
+      name: "Should pass: function passed to expect without control flow",
       code: `expect(() => { const x = 1; }).not.toThrow();`,
     },
-    // Test cy.should with no control flow
     {
+      name: "Should pass: cy.should() callback without control flow",
       code: `cy.get('button').should(($btn) => { expect($btn).to.exist; });`,
     },
-    // Test control flow outside of expect/should
     {
+      name: "Should pass: control flow outside of expect or should callback",
       code: `
         if (value) {
           expect(value).toBe(1);
         }
       `,
     },
-    // Test inline arrow callback without block
     {
+      name: "Should pass: inline arrow callback without block body",
       code: `cy.get('button').should($btn => expect($btn).to.exist);`,
     },
-    // Test that a comment on top the of the control flow statement gives no error
     {
+      name: "Should pass: control flow preceded by a comment inside expect callback",
       code: `
         expect(() => {
           // This is a comment
@@ -47,9 +47,10 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
     },
   ],
+
   invalid: [
-    // Test if inside expect callback
     {
+      name: "Should fail: if statement inside expect callback",
       code: `
         expect(() => {
           if (value === 1) {
@@ -59,8 +60,8 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
       errors: err("noControlFlowInAssert"),
     },
-    // Test if/else inside expect callback
     {
+      name: "Should fail: if/else chain inside expect callback",
       code: `
         expect(() => {
           if (x === 1) {
@@ -72,8 +73,8 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
       errors: err("noControlFlowInAssert", 2),
     },
-    // Test switch inside expect callback
     {
+      name: "Should fail: switch statement inside expect callback",
       code: `
         expect(() => {
           switch (value) {
@@ -87,8 +88,8 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
       errors: err("noControlFlowInAssert", 2),
     },
-    // Test Cypress: if inside cy.should callback
     {
+      name: "Should fail: if statement inside cy.should() callback",
       code: `
         cy.get('button').should(($btn) => {
           if ($btn.length) {
@@ -98,8 +99,8 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
       errors: err("noControlFlowInAssert"),
     },
-    // Test Cypress: switch inside cy.should callback
     {
+      name: "Should fail: switch statement inside cy.should() callback",
       code: `
         cy.get('button').should(($btn) => {
           switch ($btn.text()) {
@@ -114,8 +115,8 @@ ruleTester.run("no-control-flow-in-assert", rule, {
       `,
       errors: err("noControlFlowInAssert", 2),
     },
-    // Test nested if inside expect callback
     {
+      name: "Should fail: nested if inside inner function within expect callback",
       code: `
         expect(() => {
           function inner() {

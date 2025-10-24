@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/no-chained-traversal.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for no-chained-traversal.ts rule.
+ * @fileoverview Tests for no-chained-traversal rule.
  * @author b.ignited
  */
 
@@ -11,65 +11,65 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("no-chained-traversal", rule, {
   valid: [
-    // Test using one .find() on Cypress chain gives no error
     {
+      name: "Should pass: single .find() call on Cypress chain",
       code: "cy.get('button').find('span')",
     },
-    // Test Cypress get followed by an action, not traversal gives no error
     {
+      name: "Should pass: Cypress get() followed by action (not traversal)",
       code: "cy.get('div').click()",
     },
-    // Test accessing parentNode only gives no error
     {
+      name: "Should pass: accessing parentNode once",
       code: "element.parentNode",
     },
-    // Test accessing childNodes only gives no error
     {
+      name: "Should pass: accessing childNodes once",
       code: "el.childNodes",
     },
-    // Test using querySelector once gives no error
     {
+      name: "Should pass: single querySelector() call",
       code: "document.querySelector('.item')",
     },
-    // Test single locator call gives no error
     {
+      name: "Should pass: single locator() call in Playwright",
       code: "page.locator('div')",
     },
   ],
 
   invalid: [
-    // Chained .find() then .parent()
     {
+      name: "Should fail: chained .find() followed by .parent()",
       code: "cy.get('div').find('span').parent()",
       errors: err("noChainedTraversal"),
     },
-    // Chained .children() then .siblings()
     {
+      name: "Should fail: chained .children() followed by .siblings()",
       code: "cy.get('div').children().siblings()",
       errors: err("noChainedTraversal"),
     },
-    // parentNode followed by childNodes
     {
+      name: "Should fail: chained DOM properties parentNode → childNodes",
       code: "element.parentNode.childNodes",
       errors: err("noChainedTraversal"),
     },
-    // nextSibling followed by previousSibling
     {
+      name: "Should fail: chained DOM properties nextSibling → previousSibling",
       code: "el.nextSibling.previousSibling",
       errors: err("noChainedTraversal"),
     },
-    // querySelector chained twice
     {
+      name: "Should fail: querySelector() chained twice",
       code: "document.querySelector('ul').querySelector('li')",
       errors: err("noChainedTraversal"),
     },
-    // Three chained locators
     {
+      name: "Should fail: three chained Playwright locator() calls",
       code: "page.locator('div').locator('span').locator('button')",
       errors: err("noChainedTraversal"),
     },
-    // Chained locators for ul > li > a
     {
+      name: "Should fail: chained Playwright locator() for ul > li > a",
       code: "page.locator('ul').locator('li').locator('a')",
       errors: err("noChainedTraversal"),
     },

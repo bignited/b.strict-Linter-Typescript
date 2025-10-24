@@ -3,7 +3,7 @@ import rule from "../../dist/lib/rules/no-unnecessary-waiting-playwright.js";
 import { err } from "../../dist/lib/utils/errors.js";
 
 /**
- * @fileoverview Tests for no-unnecessary-waiting-playwright.ts rule.
+ * @fileoverview Tests for no-unnecessary-waiting-playwright rule.
  * @author b.ignited
  */
 
@@ -11,40 +11,38 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("no-unnecessary-waiting-playwright", rule, {
   valid: [
-    // Test that other good practice waits dont give error
     {
+      name: "Should pass: proper wait using page.waitForSelector()",
       code: "await page.waitForSelector('#done')",
     },
-    // Test waitForTimeout is allowed when a full like comment is above
     {
+      name: "Should pass: page.waitForTimeout() preceded by a full-line comment",
       code: "// this is a comment \n page.waitForTimeout(5000)",
     },
-    // Test that another object can call a custom waitForTimeout method
     {
+      name: "Should pass: custom waitForTimeout() method from a non-page object",
       code: "someOtherObject.waitForTimeout(3000)",
     },
   ],
 
   invalid: [
-    // Test waitForTimeout gives an error
     {
+      name: "Should fail: page.waitForTimeout() with numeric argument",
       code: "page.waitForTimeout(5000)",
       errors: err("noUnnecessaryWaitingPlaywright"),
     },
-
-    // Test wait gives an error when the line above is not a full line comment
     {
+      name: "Should fail: page.waitForTimeout() preceded by inline comment (not full-line comment)",
       code: "page.goto(b.ignited) //this is a comment\n page.waitForTimeout(10)",
       errors: err("noUnnecessaryWaitingPlaywright"),
     },
-
-    // Test that waitForTimeout gives an error when arbitrary number is through a variable
     {
+      name: "Should fail: page.waitForTimeout() with numeric variable argument",
       code: "const someNumber=500; page.waitForTimeout(someNumber)",
       errors: err("noUnnecessaryWaitingPlaywright"),
     },
-    // Test that waitForTimeour gives an error when a function argument is passed to it
     {
+      name: "Should fail: page.waitForTimeout() called with function argument",
       code: "function test(delay) { page.waitForTimeout(delay); }",
       errors: err("noUnnecessaryWaitingPlaywright"),
     },
