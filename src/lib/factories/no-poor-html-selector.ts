@@ -94,7 +94,10 @@ function reportIfPoorHtmlSelectorInVariable(
   }
 }
 
-const createRule = ESLintUtils.RuleCreator((name) => name);
+const createRule = ESLintUtils.RuleCreator(
+  (name) =>
+    `https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/${name}.md`
+);
 
 /**
  * Factory that creates a framework-specific rule
