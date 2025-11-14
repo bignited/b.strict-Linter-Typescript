@@ -161,30 +161,50 @@ For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/
 
 ## Rules
 
-All following rules are within recommended configuration
-
 **Both `cypress` and `playwright` rules have the `recommended` rules included**
 
-### ESLint rules
+### bstrict rules
 
-| Rule Name                                                                                                                                                | Included in   |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| [max-function-size](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/max-function-size.md)                                 | `recommended` |
-| [no-force](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-force.md)                                                   | `recommended` |
-| [no-print](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-print.md)                                                   | `recommended` |
-| [no-control-flow-in-assert](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-control-flow-in-assert.md)                 | `recommended` |
-| [no-chained-traversal](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-chained-traversal.md)                           | `recommended` |
-| [no-pause-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-pause-cypress.md)                                   | `cypress`     |
-| [no-unnecessary-waiting-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-cypress.md)       | `cypress`     |
-| [one-assert-per-test-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-cypress.md)             | `cypress`     |
-| [no-poor-html-selector-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-cypress.md)         | `cypress`     |
-| [no-unnecessary-waiting-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-playwright.md) | `playwright`  |
-| [one-assert-per-test-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-playwright.md)       | `playwright`  |
-| [no-poor-html-selector-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-playwright.md)   | `playwright`  |
+| Rule                                                                                                                                                     | Value    | Included in |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
+| [max-function-size](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/max-function-size.md)                                 | `"warn"` | recommended |
+| [no-force](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-force.md)                                                   | `"warn"` | recommended |
+| [no-print](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-print.md)                                                   | `"warn"` | recommended |
+| [no-control-flow-in-assert](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-control-flow-in-assert.md)                 | `"warn"` | recommended |
+| [no-chained-traversal](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-chained-traversal.md)                           | `"warn"` | recommended |
+| [no-pause-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-pause-cypress.md)                                   | `"warn"` | cypress     |
+| [no-unnecessary-waiting-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-cypress.md)       | `"warn"` | cypress     |
+| [one-assert-per-test-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-cypress.md)             | `"warn"` | cypress     |
+| [no-poor-html-selector-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-cypress.md)         | `"warn"` | cypress     |
+| [no-unnecessary-waiting-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-playwright.md) | `"warn"` | playwright  |
+| [one-assert-per-test-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-playwright.md)       | `"warn"` | playwright  |
+| [no-poor-html-selector-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-playwright.md)   | `"warn"` | playwright  |
+
+### external rules
+
+These are baseline rules we enforce across all test automation projects. Therefore they are included in **every** preset.
+
+They reflect our company-wide standards for code quality, readability, and maintainability.
+
+All external rules can be overridden or reconfigured in your local ESLint setup, just like the rules from this plugin.
+
+| Rule                                                                                             | Value                                          | Source      |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------- | ----------- |
+| [@stylistic/indent](https://eslint.style/rules/indent)                                           | `["error", 2]`                                 | Stylistic   |
+| [@stylistic/space-before-function-paren](https://eslint.style/rules/space-before-function-paren) | `"off"`                                        | Stylistic   |
+| [@stylistic/quotes](https://eslint.style/rules/quotes)                                           | `["error", "single", { "avoidEscape": true }]` | Stylistic   |
+| [@stylistic/no-multi-spaces](https://eslint.style/rules/no-multi-spaces)                         | `"error"`                                      | Stylistic   |
+| [complexity](https://eslint.org/docs/latest/rules/complexity)                                    | `["error", 2]`                                 | ESLint Core |
+| [max-depth](https://eslint.org/docs/latest/rules/max-depth)                                      | `["error", 2]`                                 | ESLint Core |
+| [max-lines](https://eslint.org/docs/latest/rules/max-lines)                                      | `"error"`                                      | ESLint Core |
+| [no-irregular-whitespace](https://eslint.org/docs/latest/rules/no-irregular-whitespace)          | `"error"`                                      | ESLint Core |
+| [no-prototype-builtins](https://eslint.org/docs/latest/rules/no-prototype-builtins)              | `"off"`                                        | ESLint Core |
+| [prefer-const](https://eslint.org/docs/latest/rules/prefer-const)                                | `"off"`                                        | ESLint Core |
+| [arrow-body-style](https://eslint.org/docs/latest/rules/arrow-body-style)                        | `["error", "always"]`                          | ESLint Core |
 
 ## Running Eslint
 
-Run you linter with
+Run the linter with:
 
 ```bash
 npx eslint .

@@ -23,17 +23,16 @@ import noPoorHtmlSelectorPlaywright from "./rules/no-poor-html-selector-playwrig
 const baseRules = {
   // External base rules
   "@stylistic/indent": ["error", 2],
+  "@stylistic/space-before-function-paren": "off",
+  "@stylistic/quotes": ["error", "single", { avoidEscape: true }],
+  "@stylistic/no-multi-spaces": "error",
   complexity: ["error", 2],
   "max-depth": ["error", 2],
   "max-lines": "error",
   "no-irregular-whitespace": "error",
   "no-prototype-builtins": "off",
-  "@stylistic/no-multi-spaces": "error",
   "prefer-const": "off",
-  "@stylistic/space-before-function-paren": "off",
-  "@stylistic/quotes": ["error", "single", { avoidEscape: true }],
   "arrow-body-style": ["error", "always"],
-  "@stylistic/no-explicit-any": "off",
 
   // Plugin base rules
   "bstrict/max-function-size": "warn",
