@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.2](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.5.1...v4.5.2) (2025-11-14)
+
+
+### Bug Fixes
+
+* added external rules documentation ([#40](https://github.com/bignited/b.strict-Linter-Javascript/issues/40)) ([f45e6aa](https://github.com/bignited/b.strict-Linter-Javascript/commit/f45e6aa56f17d2ad0b38411831e5a6ca405d86ff))
+
 ## [4.5.1](https://github.com/bignited/b.strict-Linter-Javascript/compare/v4.5.0...v4.5.1) (2025-11-14)
 
 
