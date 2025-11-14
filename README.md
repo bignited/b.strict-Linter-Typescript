@@ -167,20 +167,20 @@ All following rules are within recommended configuration
 
 ### ESLint rules
 
-| Rule Name                                                                              | Included in   |
-| -------------------------------------------------------------------------------------- | ------------- |
-| [max-function-size](./docs/rules/max-function-size.md)                                 | `recommended` |
-| [no-force](./docs/rules/no-force.md)                                                   | `recommended` |
-| [no-print](./docs/rules/no-print.md)                                                   | `recommended` |
-| [no-control-flow-in-assert](./docs/rules/no-control-flow-in-assert.md)                 | `recommended` |
-| [no-chained-traversal](./docs/rules/no-chained-traversal.md)                           | `recommended` |
-| [no-pause-cypress](./docs/rules/no-pause-cypress.md)                                   | `cypress`     |
-| [no-unnecessary-waiting-cypress](./docs/rules/no-unnecessary-waiting-cypress.md)       | `cypress`     |
-| [one-assert-per-test-cypress](./docs/rules/one-assert-per-test-cypress.md)             | `cypress`     |
-| [no-poor-html-selector-cypress](./docs/rules/no-poor-html-selector-cypress.md)         | `cypress`     |
-| [no-unnecessary-waiting-playwright](./docs/rules/no-unnecessary-waiting-playwright.md) | `playwright`  |
-| [one-assert-per-test-playwright](./docs/rules/one-assert-per-test-playwright.md)       | `playwright`  |
-| [no-poor-html-selector-playwright](./docs/rules/no-poor-html-selector-playwright.md)   | `playwright`  |
+| Rule Name                                                                                                                                                | Included in   |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| [max-function-size](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/max-function-size.md)                                 | `recommended` |
+| [no-force](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-force.md)                                                   | `recommended` |
+| [no-print](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-print.md)                                                   | `recommended` |
+| [no-control-flow-in-assert](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-control-flow-in-assert.md)                 | `recommended` |
+| [no-chained-traversal](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-chained-traversal.md)                           | `recommended` |
+| [no-pause-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-pause-cypress.md)                                   | `cypress`     |
+| [no-unnecessary-waiting-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-cypress.md)       | `cypress`     |
+| [one-assert-per-test-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-cypress.md)             | `cypress`     |
+| [no-poor-html-selector-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-cypress.md)         | `cypress`     |
+| [no-unnecessary-waiting-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-playwright.md) | `playwright`  |
+| [one-assert-per-test-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-playwright.md)       | `playwright`  |
+| [no-poor-html-selector-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-playwright.md)   | `playwright`  |
 
 ## Running Eslint
 

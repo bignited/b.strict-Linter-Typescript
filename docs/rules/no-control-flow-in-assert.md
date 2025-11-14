@@ -52,4 +52,4 @@ if (value) {
 
 ❌ - This rule does not have a `--fix` functionality.
 
-[⬅ Back to Rules](../../README.md#rules)
+[⬅ Back to Rules](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/README.md#rules)

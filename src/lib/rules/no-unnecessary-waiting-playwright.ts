@@ -47,7 +47,10 @@ function reportIfPlaywrightWait(
   }
 }
 
-const createRule = ESLintUtils.RuleCreator((name) => name);
+const createRule = ESLintUtils.RuleCreator(
+  (name) =>
+    `https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/${name}.md`
+);
 
 const rule = createRule({
   name: "no-unnecessary-waiting-playwright",

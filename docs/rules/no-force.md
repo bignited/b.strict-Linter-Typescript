@@ -41,4 +41,4 @@ cy.get("button").click();
 
 ✅ - Remove all force arguments when running `--fix`.
 
-[⬅ Back to Rules](../../README.md#rules)
+[⬅ Back to Rules](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/README.md#rules)

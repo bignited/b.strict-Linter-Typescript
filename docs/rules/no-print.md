@@ -42,4 +42,4 @@ console.log("Allowed due to preceding comment");
 
 ✅ - Remove all print statements when running `--fix`.
 
-[⬅ Back to Rules](../../README.md#rules)
+[⬅ Back to Rules](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/README.md#rules)
