@@ -189,3 +189,11 @@ Run you linter with
 ```bash
 npx eslint .
 ```
+
+## Feedback & Suggestions
+
+Your feedback helps shape this project!
+Whether it's a new rule idea, a bug you’ve discovered, or thoughts on how to improve the plugin, we’d love to hear from you.
+
+**Contact:**
+<devops@bignited.be>
