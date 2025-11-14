@@ -80,6 +80,4 @@ function finalizeCheckout(items) {
 
 ❌ - This rule does not have a `--fix` functionality.
 
-## Included in Presets:
-
-- `recommended`
+[⬅ Back to Rules](../../README.md#rules)

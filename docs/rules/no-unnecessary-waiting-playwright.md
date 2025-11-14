@@ -46,9 +46,6 @@ await page.waitForLoadState("networkidle");
 
 ## Fixable by code
 
-❌ - This rule does not have a `--fix` functionality.
+❌ - This rule does not have a `--fix` functionality.`
 
-## Included in Presets:
-
-- `recommended`
-- `playwright`
+[⬅ Back to Rules](../../README.md#rules)

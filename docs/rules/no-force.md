@@ -41,6 +41,4 @@ cy.get("button").click();
 
 ✅ - Remove all force arguments when running `--fix`.
 
-## Included in Presets:
-
-- `recommended`
+[⬅ Back to Rules](../../README.md#rules)

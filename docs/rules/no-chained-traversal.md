@@ -46,6 +46,4 @@ Chaining a traversal with an action method (e.g. `.click()`, `.type()`, `.contai
 
 ❌ - This rule does not have a `--fix` functionality.
 
-## Included in Presets:
-
-- `recommended`
+[⬅ Back to Rules](../../README.md#rules)

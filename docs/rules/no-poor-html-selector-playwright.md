@@ -69,7 +69,4 @@ page.getByTestId("login-button");
 
 ❌ - This rule does not have a `--fix` functionality.
 
-## Included in Presets:
-
-- `recommended`
-- `playwright`
+[⬅ Back to Rules](../../README.md#rules)

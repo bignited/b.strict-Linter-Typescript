@@ -73,7 +73,4 @@ it("no assertions", () => {
 
 ❌ - This rule does not have a `--fix` functionality.
 
-## Included in Presets:
-
-- `recommended`
-- `cypress`
+[⬅ Back to Rules](../../README.md#rules)

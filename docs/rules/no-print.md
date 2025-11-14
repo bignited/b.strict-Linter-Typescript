@@ -42,6 +42,4 @@ console.log("Allowed due to preceding comment");
 
 ✅ - Remove all print statements when running `--fix`.
 
-## Included in Presets:
-
-- `recommended`
+[⬅ Back to Rules](../../README.md#rules)
