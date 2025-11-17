@@ -81,7 +81,7 @@ function reportIfForcedActionCommand(
 
 const createRule = ESLintUtils.RuleCreator(
   (name) =>
-    `https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/${name}.md`
+    `https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/${name}.md`
 );
 
 const rule = createRule({

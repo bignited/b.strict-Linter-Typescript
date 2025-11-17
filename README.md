@@ -167,18 +167,18 @@ For more, see the [ESLint rules](https://eslint.org/docs/user-guide/configuring/
 
 | Rule                                                                                                                                                     | Value    | Included in |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
-| [max-function-size](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/max-function-size.md)                                 | `"warn"` | recommended |
-| [no-force](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-force.md)                                                   | `"warn"` | recommended |
-| [no-print](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-print.md)                                                   | `"warn"` | recommended |
-| [no-control-flow-in-assert](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-control-flow-in-assert.md)                 | `"warn"` | recommended |
-| [no-chained-traversal](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-chained-traversal.md)                           | `"warn"` | recommended |
-| [no-pause-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-pause-cypress.md)                                   | `"warn"` | cypress     |
-| [no-unnecessary-waiting-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-cypress.md)       | `"warn"` | cypress     |
-| [one-assert-per-test-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-cypress.md)             | `"warn"` | cypress     |
-| [no-poor-html-selector-cypress](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-cypress.md)         | `"warn"` | cypress     |
-| [no-unnecessary-waiting-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-unnecessary-waiting-playwright.md) | `"warn"` | playwright  |
-| [one-assert-per-test-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/one-assert-per-test-playwright.md)       | `"warn"` | playwright  |
-| [no-poor-html-selector-playwright](https://github.com/bignited/b.strict-Linter-Javascript/blob/develop/docs/rules/no-poor-html-selector-playwright.md)   | `"warn"` | playwright  |
+| [max-function-size](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/max-function-size.md)                                 | `"warn"` | recommended |
+| [no-force](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-force.md)                                                   | `"warn"` | recommended |
+| [no-print](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-print.md)                                                   | `"warn"` | recommended |
+| [no-control-flow-in-assert](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-control-flow-in-assert.md)                 | `"warn"` | recommended |
+| [no-chained-traversal](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-chained-traversal.md)                           | `"warn"` | recommended |
+| [no-pause-cypress](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-pause-cypress.md)                                   | `"warn"` | cypress     |
+| [no-unnecessary-waiting-cypress](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-unnecessary-waiting-cypress.md)       | `"warn"` | cypress     |
+| [one-assert-per-test-cypress](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/one-assert-per-test-cypress.md)             | `"warn"` | cypress     |
+| [no-poor-html-selector-cypress](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-poor-html-selector-cypress.md)         | `"warn"` | cypress     |
+| [no-unnecessary-waiting-playwright](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-unnecessary-waiting-playwright.md) | `"warn"` | playwright  |
+| [one-assert-per-test-playwright](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/one-assert-per-test-playwright.md)       | `"warn"` | playwright  |
+| [no-poor-html-selector-playwright](https://github.com/bignited/b.strict-Linter-Typescript/blob/develop/docs/rules/no-poor-html-selector-playwright.md)   | `"warn"` | playwright  |
 
 ### external rules
 
