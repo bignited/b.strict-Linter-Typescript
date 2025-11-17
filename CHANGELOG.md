@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.3](https://github.com/bignited/b.strict-Linter-Typescript/compare/v4.5.2...v4.5.3) (2025-11-17)
+
+
+### Bug Fixes
+
+* fix links due to repo name change ([#42](https://github.com/bignited/b.strict-Linter-Typescript/issues/42)) ([e194a22](https://github.com/bignited/b.strict-Linter-Typescript/commit/e194a221e9e85ecfa9a4f8f4ad136302abc2f436))
+
 ## [4.5.2](https://github.com/bignited/b.strict-Linter-Typescript/compare/v4.5.1...v4.5.2) (2025-11-14)
 
 ### Bug Fixes
